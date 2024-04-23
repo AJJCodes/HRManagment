@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Contratacion\" />
-    <Folder Include="Gestion Tiempo\" />
-    <Folder Include="Seguridad\" />
   </ItemGroup>
 
 </Project>
