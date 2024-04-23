@@ -10,6 +10,7 @@
     <Folder Include="Controllers\Gestion Tiempo\" />
     <Folder Include="Controllers\Seguridad\" />
     <Folder Include="Dasboard\Assets\CSS\" />
+    <Folder Include="wwwroot\Imagenes\Colaboradores\" />
   </ItemGroup>
 
 </Project>
