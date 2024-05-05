@@ -1,0 +1,89 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/a2dd6045c4.js" crossorigin="anonymous"></script>
+    <meta name="viewpoert" content="width=device-width" , initial-scale="1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Inicio de Sesion</title>
+    <link rel="stylesheet" href="~/css/sweetalert2.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <script src="~/js/sweetalert2.all.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <section>
+        <div class="contenedor">
+            <div class="formulario">
+                <form action="" method="post" onsubmit="validarFormulario(event)">
+                    <h2>Iniciar Sesion</h2>
+                    <div class="input-contenedor">
+                        <i class="fa-solid fa-user"></i>
+                        <input id="usuario" type="text" required>
+                        <label for="#">Usuario</label>
+                    </div>
+
+                    <div class="input-contenedor">
+                        <i class="fa-solid fa-lock"></i>
+                        <input id="password" type="password" required>
+                        <label for="#">Contraseña</label>
+                    </div>
+
+                    <div class="olvidar">
+                        <label for="#">
+                            <input type="checkbox"> Recordar
+                            <a href="#">Olvide mi Contraseña</a>
+                        </label>
+                    </div>
+                    <div>
+                        <button type="submit">Ingresar</button>
+                    </div>
+                </form>
+
+                
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function validarFormulario(event) {
+                event.preventDefault(); // Evita que se envíe el formulario automáticamente
+
+                // Obtener los valores ingresados por el usuario
+                var usuario = document.getElementById("usuario").value;
+                var password = document.getElementById("password").value;
+
+                // Verificar si los valores son correctos
+                if (usuario === "hradmin" && password === "admin2023") {
+                    // Si las credenciales son correctas, redirigir al usuario a la página deseada
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Ha ingresado con exito',
+                        confirmButtonText:'Ingresar'
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = "Home";
+                        }
+                    })
+                } else {
+                    // Si las credenciales son incorrectas, mostrar un mensaje de error
+                    Swal.fire({
+                        type: 'error',
+                        title: 'Credenciales incorrectas',
+                    });
+                }
+            }
+
+            // Obtener el formulario y adjuntar el controlador de eventos al mismo
+            var form = document.getElementsByTagName("form")[0];
+            form.addEventListener("submit", validarFormulario);
+        </script>
+    </section>
+</body>
+</html>
