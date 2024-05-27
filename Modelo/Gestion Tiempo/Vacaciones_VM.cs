@@ -8,5 +8,14 @@ namespace Modelo.Gestion_Tiempo
 {
     public  class Vacaciones_VM
     {
+        public int IdSolicitudVacaciones { get; set; }
+
+        public DateTime? FechaInicio { get; set; }
+
+        public DateTime? FechaFin { get; set; }
+
+        public double? CantDias { get; set; }
+
+        public int? IdRegistroColaborador { get; set; }
     }
 }

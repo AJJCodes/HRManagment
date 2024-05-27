@@ -1,6 +1,6 @@
 ﻿﻿﻿
 @{
-    ViewBag.Title = "Colaboradores";
+    ViewBag.Title = "Solicitutes Vacaciones";
 }
 
 
@@ -16,13 +16,15 @@
 </style>
 
 
-<div id="DivTablaColaboradores" class="card">
+<div id="DivSolicitatVacacionesEmpleados" class="card">
     <table id="TablaDeColavboradores" class="table-responsive table align-middle mb-0 bg-white w-100 table table-striped table-hover table-bordered rounded-2">
         <thead class="bg-light">
             <tr>
                 <th>Codigo Colaborador</th>
                 <th>Nombre Completo</th>
-                <th>Salario</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Cant Dias</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,7 +36,7 @@
 
 
 
-<div id="DivAgregarColaborador" style="display:none" class="container shadow-lg p-4">
+<div id="DivAgregarSolicitudVacacion" style="display:none" class="container shadow-lg p-4">
     <form class="row" id="AgregarClienteyContratoForm">
 
         <p class="text-start my-3 fw-bold fs-4">Datos Cliente</p>
@@ -130,6 +132,6 @@
 </div>
 
 @section scripts {
-@*     <script type="text/javascript" src="~/Scripts/JSvistas/Clientes/ValidacionesAgregar.js"></script> *@
+    @*     <script type="text/javascript" src="~/Scripts/JSvistas/Clientes/ValidacionesAgregar.js"></script> *@
     <script type="text/javascript" src="~/ScriptsJS/Contratacion//Colaboradores/Index.js"></script>
 }

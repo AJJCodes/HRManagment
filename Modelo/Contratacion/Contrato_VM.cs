@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Modelo.Contratacion
 {
-    public  class Contratacion_VM
+    internal class Contrato_VM
     {
-
     }
 }

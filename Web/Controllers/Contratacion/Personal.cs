@@ -1,10 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Logica.Contratacion;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Modelo.Contratacion;
 
 namespace Web.Controllers.Contratacion
 {
     public class Personal : Controller
     {
+
+        private readonly Contratacion_LN ln;
+        public Personal() {
+            ln= new Contratacion_LN();
+        }
         // GET: Personal
         public ActionResult Index()
         {
@@ -79,5 +86,31 @@ namespace Web.Controllers.Contratacion
                 return View();
             }
         }
+
+        #region CRUD
+
+        #endregion
+        #region Consultas
+        [HttpPost]
+        public IActionResult ObtenerListColaboradores()
+        {
+            List<ColaboradoresYcontrato_VM> ListaColaboradores = new List<ColaboradoresYcontrato_VM>();
+            string? errorMessage = null;
+
+            // Llamar a tu función para obtener la lista de usuarios
+            bool exito = ln.ProporcionaListaColaboradores(ref ListaColaboradores, out errorMessage);
+
+            if (exito)
+            {
+                // Devolver la lista de usuarios en el formato esperado por DataTables
+                return Json(new { data = ListaColaboradores });
+            }
+            else
+            {
+                // Devolver el mensaje de error en caso de fallo
+                return Json(new { error = errorMessage });
+            }
+        }
+        #endregion
     }
 }
