@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Datos.BaseDatos;
@@ -129,4 +130,17 @@ public partial class Contexto : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public void SpAgregarColaboradorYContrato(string nombresColaborador, string apellidosColaborador, float salario, DateTime fechaInicio, DateTime? fechaFin, string CodigoColab)
+    {
+        var nombresParam = new SqlParameter("@NombresColaborador", nombresColaborador);
+        var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
+        var salarioParam = new SqlParameter("@Salario", salario);
+        var fechaInicioParam = new SqlParameter("@FechaInicio", fechaInicio);
+        var fechaFinParam = new SqlParameter("@FechaFin", fechaFin);
+        var CodigoColaborador = new SqlParameter("@CodigoColaborador", CodigoColab);
+
+        this.Database.ExecuteSqlRaw("EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador",
+            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam,CodigoColaborador);
+    }
 }

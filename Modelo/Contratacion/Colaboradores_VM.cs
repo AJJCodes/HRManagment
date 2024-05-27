@@ -10,17 +10,20 @@ namespace Modelo.Contratacion
     {
         public int IdColaborador { get; set; }
 
-        public string? NombresColaborador { get; set; }
+        public string NombresColaborador { get; set; }
 
-        public string? ApellidosColaborador { get; set; }
+        public string ApellidosColaborador { get; set; }
 
         public int? IdUsuario { get; set; }
     }
 
     public class ColaboradoresYcontrato_VM : Colaboradores_VM
     {
-        public double? Salario { get; set; }
+        public float Salario { get; set; }
 
         public string? CodigoColaborador { get; set; }
+
+        public DateTime FechaInicio { get; set; }
+        public DateTime? FechaFin { get; set; }
     }
 }

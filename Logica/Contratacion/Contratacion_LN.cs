@@ -31,7 +31,7 @@ namespace Logica.Contratacion
                                   IdColaborador = Col.IdColaborador,
                                   CodigoColaborador = DL.CodigoColaborador,
                                   NombresColaborador = Col.NombresColaborador +" "+ Col.ApellidosColaborador,
-                                  Salario = Con.Salario
+                                  Salario = (float)Con.Salario
                               }).ToList();
                 errorMessage = null;  // No hay error, establecer el mensaje a null
                 return true;
@@ -45,7 +45,25 @@ namespace Logica.Contratacion
         #endregion
 
         #region CRUD
+        public bool AgregarColaboradorYcontrato(ColaboradoresYcontrato_VM e)
+        {
+            try
+            {
+                // Ejecuta el procedimiento almacenado
+                bd.SpAgregarColaboradorYContrato(e.NombresColaborador, e.ApellidosColaborador, e.Salario, e.FechaInicio, e.FechaFin,e.CodigoColaborador);
 
+                // Guarda los cambios en la base de datos
+                bd.SaveChanges();
+
+                // Si no se producen errores, devuelve true
+                return true;
+            }
+            catch (Exception)
+            {
+                // Si ocurre un error, registra el mensaje de error (si es necesario) y devuelve false
+                return false;
+            }
+        }
         #endregion
     }
 }

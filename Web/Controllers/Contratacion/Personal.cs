@@ -88,7 +88,27 @@ namespace Web.Controllers.Contratacion
         }
 
         #region CRUD
+        [HttpPost]
+        public ActionResult AgregarColaboradorYcontrato(ColaboradoresYcontrato_VM Colaborador)
+        {
+            try
+            {
+                bool resultado = ln.AgregarColaboradorYcontrato(Colaborador);
 
+                if (resultado)
+                {
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false });
+            }
+        }
         #endregion
         #region Consultas
         [HttpPost]

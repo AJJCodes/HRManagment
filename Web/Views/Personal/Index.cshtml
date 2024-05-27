@@ -35,47 +35,27 @@
 
 
 <div id="DivAgregarColaborador" style="display:none" class="container shadow-lg p-4">
-    <form class="row" id="AgregarClienteyContratoForm">
+    <form class="row" id="AgregarColaboradorYcontrato">
 
-        <p class="text-start my-3 fw-bold fs-4">Datos Cliente</p>
+        <p class="text-start my-3 fw-bold fs-4">Datos Colaborador</p>
 
         <!-- Lado izquierdo -->
 
         <div class="col-6">
-            <label for="NombreCliente" class="form-label">Nombre:</label>
-            <input type="text" class="form-control" id="NombreCliente" name="NombreCliente">
+            <label for="NombresColaborador" class="form-label">Nombres:</label>
+            <input type="text" class="form-control" id="NombresColaborador" name="NombresColaborador">
             <div class="invalid-feedback"></div>
         </div>
 
         <div class="col">
 
             <div class="form-group">
-                <label for="Apellido" class="form-label">Apellido:</label>
-                <input type="text" name="Apellido" id="Apellido" class="form-control">
+                <label for="ApellidosColaborador" class="form-label">Apellido:</label>
+                <input type="text" name="ApellidosColaborador" id="ApellidosColaborador" class="form-control">
                 <div class="invalid-feedback"></div>
             </div>
 
         </div>
-
-
-        <div class="col-6">
-            <label for="Cedula" class="form-label">Cedula:</label>
-            <input type="text" class="form-control" id="Cedula" name="Cedula" remote="@Url.Action("ValidarCedula", "Clientes")">
-            <div class="invalid-feedback"></div>
-        </div>
-
-        <div class="col-6">
-            <label for="TelefonoCliente" class="form-label">Celular:</label>
-            <input type="tel" class="form-control" id="TelefonoCliente" name="TelefonoCliente">
-            <div class="invalid-feedback"></div>
-        </div>
-
-        <div class="col-6">
-            <label for="Correo" class="form-label">Correo:</label>
-            <input type="email" class="form-control" id="Correo" name="Correo">
-            <div class="invalid-feedback"></div>
-        </div>
-
 
         <div class=" p-4">
             <hr style="border: 2PX solid BLACK" />
@@ -85,34 +65,20 @@
         <p class="text-start my-3 fw-bold fs-4">Datos de Contrato</p>
 
 
-        <div class="col-6" style="margin-bottom: 20px;">
-            <label for="Deposito" class="form-label">Deposito Inical:</label>
-            <input type="number" class="form-control" id="Deposito" name="Deposito">
+        <div class="col-12" style="margin-bottom: 20px;">
+            <label for="SalarioColaborador" class="form-label">Salario Colaborador:</label>
+            <input type="number" class="form-control" id="SalarioColaborador" name="SalarioColaborador">
             <div class="invalid-feedback"></div>
         </div>
 
         <div class="col-6">
-            <div class="">
-                <label for="IdCargo" class="form-label">Cuarto:</label>
-                <div class="dropdown">
-                    <select class="selectpicker form-control" select data-live-search="true" data-live-search-style="startsWith" id="IdCuarto" name="IdCuarto" aria-label="Seleccionar">
-                    </select>
-                    <div class="invalid-feedback"></div>
-                    <div class="dropdown-menu" aria-labelledby="IdCuarto">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-6">
-            <label for="FechaInicio" class="form-label">Fecha de Inicio de Contrato</label>
-            <input type="date" name="FechaInicio" id="FechaInicio" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="w-100 form-control" />
+            <label for="FechaInicioContrato" class="form-label">Fecha de Inicio de Contrato</label>
+            <input type="date" name="FechaInicioContrato" id="FechaInicioContrato" value="@DateTime.Now.ToString("yyyy-MM-dd")" class="w-100 form-control" />
         </div>
 
         <div class="col-6 mb-3">
-            <label for="FechaFin" class="form-label">Fecha de Fin de Contrato</label>
-            <input type="date" name="FechaFin" id="FechaFin" class="w-100 form-control" />
+            <label for="FechaFinContrato" class="form-label">Fecha de Fin de Contrato</label>
+            <input type="date" name="FechaFinContrato" id="FechaFinContrato" class="w-100 form-control" />
         </div>
 
 
