@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contratacion\" />
-    <Folder Include="Gestion Tiempo\" />
-    <Folder Include="Seguridad\" />
+    <Compile Remove="Seguridad\**" />
+    <EmbeddedResource Remove="Seguridad\**" />
+    <None Remove="Seguridad\**" />
   </ItemGroup>
 
 </Project>
