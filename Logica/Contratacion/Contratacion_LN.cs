@@ -42,10 +42,28 @@ namespace Logica.Contratacion
                 return false;
             }
         }
+
+        public bool VerificarExistenciaCodigo(string CodigoColab)
+        {
+            // Buscar el elemento en la tabla correspondiente
+            var elemento = bd.DatosLaborales.FirstOrDefault(e => e.CodigoColaborador == CodigoColab);
+
+            // Verificar si el elemento existe en la tabla
+            if (elemento != null)
+            {
+                // El elemento ya existe en la tabla
+                return true;
+            }
+            else
+            {
+                // El elemento no existe en la tabla
+                return false;
+            }
+        }
         #endregion
 
         #region CRUD
-        public bool AgregarColaboradorYcontrato(ColaboradoresYcontrato_VM e)
+        public bool AgregarColaboradorYcontrato(ColaboradoresYcontrato_VM e, out string? errorMessage)
         {
             try
             {
@@ -55,12 +73,12 @@ namespace Logica.Contratacion
                 // Guarda los cambios en la base de datos
                 bd.SaveChanges();
 
-                // Si no se producen errores, devuelve true
+                errorMessage = null;  // No hay error, establecer el mensaje a null
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Si ocurre un error, registra el mensaje de error (si es necesario) y devuelve false
+                errorMessage = ex.Message;
                 return false;
             }
         }

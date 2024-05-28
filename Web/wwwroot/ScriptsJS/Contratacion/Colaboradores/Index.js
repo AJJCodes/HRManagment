@@ -1,9 +1,75 @@
-﻿var table;
-
-
-window.Componente = {
+﻿window.Componente = {
     UrlControlador: "/Personal/"
 };
+
+
+
+var table;
+
+
+
+//Validaciones
+$("#AgregarColaboradorYcontrato").validate({
+    rules: {
+        CodigoColaborador: {
+            required: true,
+            minlength: 3,
+            maxlength: 100,
+            remote: {
+                url: Componente.UrlControlador + 'ValidarExistenciaCodigo',
+                type: 'post',
+                data: {
+                    Codigo: function () {
+                        return $('#CodigoColaborador').val();
+                    }
+                }
+            }
+        },
+        NombresColaborador: {
+            required: true,
+            minlength: 1,
+            maxlength: 100
+        },
+        ApellidosColaborador: {
+            required: true,
+            minlength: 1,
+            maxlength: 100
+        },
+        SalarioColaborador: {
+            required: true,
+            min: 100,
+        }
+    },
+    messages: {
+        CodigoCuarto: {
+            required: "Por favor ingrese un Codigo",
+            minlength: "El Codigo del tiene que tener una longitud de minimo 3",
+            maxlength: "El Codigo del tiene que tener una longitud maxima de  10 caracteres",
+            remote: "Este codigo ya esta en uso"
+        },
+        NombresColaborador: {
+            required: "Por Favor Ingrese los nombres Del Colaborador",
+            minlength: "La longitud minima debe de ser 1 caracter",
+            maxlength: "La longitud maxima debe de ser 100 caracteres"
+        },
+        ApellidosColaborador: {
+            required: "Por favor Ingrese los apellidos Del Colaborador",
+            minlength: "La longitud Mininma debe de ser 1 Caracter",
+            maxlength: "La longitud Maxima debe de ser 100 Caracteres"
+        },
+        SalarioColaborador: {
+            required: "Este Campo Es Requerido",
+            min: "La Cantidad Minima aqui deberia de ser 100",
+        }
+    },
+    highlight: function (element) {
+        $(element).addClass('is-invalid').removeClass('is-valid');
+    },
+    unhighlight: function (element) {
+        $(element).addClass('is-valid').removeClass('is-invalid');
+    }
+});
+
 
 PoblarTablaColaboradores();
 
@@ -25,8 +91,6 @@ function PoblarTablaColaboradores() {
                 });
                 return;
             }
-
-            console.log('Datos recibidos:', response.data);
 
             table = $('#TablaDeColavboradores').DataTable({
                 data: response.data, // Utiliza los datos recibidos en la respuesta AJAX
@@ -111,32 +175,45 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
 
     // Verifica si el formulario es válido utilizando jQuery Validation Plugin
     if ($('#AgregarColaboradorYcontrato').valid()) {
-        // Realiza aquí la lógica que deseas ejecutar al enviar el formulario
+        var CodigoColaborador = $('#CodigoColaborador').val();
+        var NombresColaborador = $('#NombresColaborador').val();
+        var ApellidosColaborador = $('#ApellidosColaborador').val();
+        var SalarioColaborador = $('#SalarioColaborador').val();
+        var FechaInicioColaborador = $('#FechaInicioContrato').val();
+        var FechFinColaborador = $('#FechaFinContrato').val();
 
-        // Ejemplo de llamada a la función "AgregarClienteyContrato" en tu controlador:
+        var DatosColab = {
+            CodigoColaborador: CodigoColaborador,
+            NombresColaborador: NombresColaborador,
+            ApellidosColaborador: ApellidosColaborador,
+            Salario: SalarioColaborador,
+            FechaInicio: FechaInicioColaborador,
+            FechaFin: FechFinColaborador
+        };
+
         $.ajax({
-            url: Componente.UrlControlador + 'AgregarClienteyContrato',
+            url: Componente.UrlControlador + 'AgregarColaboradorYcontrato',
             type: 'POST',
-            data: $(this).serialize(),
+            data: DatosColab,
             success: function (response) {
                 if (response.success) {
                     Swal.fire({
                         icon: 'success',
                         title: 'Éxito',
-                        text: 'El cliente y contrato se agregaron exitosamente',
+                        text: 'El Colaborador y contrato se agregaron exitosamente',
                         showConfirmButton: true, // Muestra el botón "OK"
                     }).then(function () {
-                        $('#DivAgregarCliente').hide();
-                        $('#TablaDeCliente').DataTable().ajax.reload();
-                        $('#DivTablaCliente').show();
+                        $('#DivAgregarColaborador').hide();
+                        $('#TablaDeColavboradores').DataTable().ajax.reload();
+                        $('#DivTablaColaboradores').show();
                         // Limpiar el formulario
-                        $('#AgregarClienteyContratoForm')[0].reset();
+                        $('#AgregarColaboradorYcontrato')[0].reset();
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Hubo un error al agregar el cliente y contrato'
+                        text: response.error || 'Hubo un error al agregar el cliente y contrato'
                     });
                 }
             },
@@ -150,3 +227,4 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
         });
     }
 });
+

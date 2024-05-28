@@ -131,7 +131,7 @@ public partial class Contexto : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-    public void SpAgregarColaboradorYContrato(string nombresColaborador, string apellidosColaborador, float salario, DateTime fechaInicio, DateTime? fechaFin, string CodigoColab)
+    public void SpAgregarColaboradorYContrato(string nombresColaborador, string apellidosColaborador, float salario, DateTime fechaInicio, DateTime? fechaFin, string? CodigoColab)
     {
         var nombresParam = new SqlParameter("@NombresColaborador", nombresColaborador);
         var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
