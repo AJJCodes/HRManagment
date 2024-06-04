@@ -8,6 +8,17 @@ var table;
 
 
 
+$('input[name="FechaInicioContrato"]').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 10)
+}, function (start, end, label) {
+    var years = moment().diff(start, 'years');
+    alert("You are " + years + " years old!");
+});
+
+
 //Validaciones
 $("#AgregarColaboradorYcontrato").validate({
     rules: {
@@ -95,25 +106,25 @@ function PoblarTablaColaboradores() {
             table = $('#TablaDeColavboradores').DataTable({
                 data: response.data, // Utiliza los datos recibidos en la respuesta AJAX
                 columns: [
-                    { data: 'CodigoColaborador' },
-                    { data: 'NombresColaborador' },
-                    { data: 'Salario' },
+                    { data: 'codigoColaborador' },
+                    { data: 'nombresColaborador' },
+                    { data: 'salario' },
                     {
-                        "data": "IdColaborador",
-                        "render": function (data, type, row) {
+                        data: 'idColaborador',
+                        render: function (data, type, row) {
                             return `
-                    <div class="d-flex justify-content-between">
-                        <div class="btn-group">
-                            <button class="btn btn-primary editar-btn" data-idColaborador="${row.IdColaborador}">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
+                                <div class="d-flex justify-content-between">
+                                    <div class="btn-group">
+                                        <button class="btn btn-primary editar-btn" data-idColaborador="${row.idColaborador}">
+                                            <i class="las la-pencil-alt"></i>
+                                        </button>
 
-                            <button class="btn btn-danger eliminar-btn" data-idColaborador="${row.IdColaborador}">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
+                                        <button class="btn btn-danger eliminar-btn" data-idColaborador="${row.idColaborador}">
+                                            <i class="las la-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
                         }
                     }
                 ],
@@ -213,7 +224,7 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: response.error || 'Hubo un error al agregar el cliente y contrato'
+                        text: response.error || 'Hubo un error al agregar el Colaborador y contrato'
                     });
                 }
             },

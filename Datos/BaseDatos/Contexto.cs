@@ -137,10 +137,17 @@ public partial class Contexto : DbContext
         var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
         var salarioParam = new SqlParameter("@Salario", salario);
         var fechaInicioParam = new SqlParameter("@FechaInicio", fechaInicio);
-        var fechaFinParam = new SqlParameter("@FechaFin", fechaFin);
-        var CodigoColaborador = new SqlParameter("@CodigoColaborador", CodigoColab);
+
+        // Manejar el parámetro de fechaFin como un parámetro nulo si no tiene valor
+        var fechaFinParam = new SqlParameter("@FechaFin", fechaFin.HasValue ? (object)fechaFin.Value : DBNull.Value)
+        {
+            SqlDbType = System.Data.SqlDbType.DateTime
+        };
+
+        var CodigoColaborador = new SqlParameter("@CodigoColaborador", string.IsNullOrEmpty(CodigoColab) ? (object)DBNull.Value : CodigoColab);
 
         this.Database.ExecuteSqlRaw("EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador",
-            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam,CodigoColaborador);
+            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam, CodigoColaborador);
     }
+
 }
