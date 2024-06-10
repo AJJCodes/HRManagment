@@ -3,23 +3,76 @@
 };
 
 
+//Metodos de validacion personalizados
+// Añadir método de validación personalizado
+$.validator.addMethod("dateGreaterThan", function (value, element, params) {
+    if (!value) {
+        return true; // Permitir nulo
+    }
+    if (!/Invalid|NaN/.test(new Date(value))) {
+        return new Date(value) > new Date($(params).val());
+    }
+    return isNaN(value) && isNaN($(params).val()) || (Number(value) > Number($(params).val()));
+}, 'La fecha de fin debe ser mayor que la fecha de inicio.');
 
+$.validator.addMethod("dateLessThan", function (value, element, params) {
+    if (!value) {
+        return false; // Fecha de inicio no debe ser nula
+    }
+    var endDate = $(params).val();
+    if (!endDate) {
+        return true; // Permitir nulo en fecha de fin
+    }
+    if (!/Invalid|NaN/.test(new Date(value)) && !/Invalid|NaN/.test(new Date(endDate))) {
+        return new Date(value) < new Date(endDate);
+    }
+    return false;
+}, 'La fecha de inicio debe ser menor que la fecha de fin.');
+
+
+
+
+
+//Variables Globales
 var table;
 
 
 
+// Inicializar el campo FechaInicioContrato
 $('input[name="FechaInicioContrato"]').daterangepicker({
     singleDatePicker: true,
     showDropdowns: true,
     minYear: 1901,
-    maxYear: parseInt(moment().format('YYYY'), 10)
-}, function (start, end, label) {
-    var years = moment().diff(start, 'years');
-    alert("You are " + years + " years old!");
+    maxYear: parseInt(moment().format('YYYY'), 10),
+    locale: {
+        format: 'YYYY-MM-DD'
+    }
 });
 
+// Inicializar el campo FechaFinContrato
+$('input[name="FechaFinContrato"]').daterangepicker({
+    singleDatePicker: true,
+    showDropdowns: true,
+    autoUpdateInput: false, // No actualizar el campo de entrada automáticamente
+    minYear: 1901,
+    maxYear: parseInt(moment().format('YYYY'), 10),
+    locale: {
+        format: 'YYYY-MM-DD'
+    }
+});
 
-//Validaciones
+// Limpiar el valor inicial del campo FechaFinContrato
+$('input[name="FechaFinContrato"]').val('');
+
+// Configurar el comportamiento cuando se selecciona una fecha en FechaFinContrato
+$('input[name="FechaFinContrato"]').on('apply.daterangepicker', function (ev, picker) {
+    $(this).val(picker.startDate.format('YYYY-MM-DD'));
+});
+
+$('input[name="FechaFinContrato"]').on('cancel.daterangepicker', function (ev, picker) {
+    $(this).val('');
+});
+// Validaciones
 $("#AgregarColaboradorYcontrato").validate({
     rules: {
         CodigoColaborador: {
@@ -49,28 +102,42 @@ $("#AgregarColaboradorYcontrato").validate({
         SalarioColaborador: {
             required: true,
             min: 100,
+        },
+        FechaInicioContrato: {
+            required: true,
+            dateLessThan: '#FechaFinContrato'
+        },
+        FechaFinContrato: {
+            dateGreaterThan: '#FechaInicioContrato'
         }
     },
     messages: {
-        CodigoCuarto: {
-            required: "Por favor ingrese un Codigo",
-            minlength: "El Codigo del tiene que tener una longitud de minimo 3",
-            maxlength: "El Codigo del tiene que tener una longitud maxima de  10 caracteres",
-            remote: "Este codigo ya esta en uso"
+        CodigoColaborador: {
+            required: "Por favor ingrese un Código",
+            minlength: "El Código debe tener una longitud mínima de 3 caracteres",
+            maxlength: "El Código debe tener una longitud máxima de 100 caracteres",
+            remote: "Este código ya está en uso"
         },
         NombresColaborador: {
-            required: "Por Favor Ingrese los nombres Del Colaborador",
-            minlength: "La longitud minima debe de ser 1 caracter",
-            maxlength: "La longitud maxima debe de ser 100 caracteres"
+            required: "Por favor ingrese los nombres del colaborador",
+            minlength: "La longitud mínima debe ser 1 carácter",
+            maxlength: "La longitud máxima debe ser 100 caracteres"
         },
         ApellidosColaborador: {
-            required: "Por favor Ingrese los apellidos Del Colaborador",
-            minlength: "La longitud Mininma debe de ser 1 Caracter",
-            maxlength: "La longitud Maxima debe de ser 100 Caracteres"
+            required: "Por favor ingrese los apellidos del colaborador",
+            minlength: "La longitud mínima debe ser 1 carácter",
+            maxlength: "La longitud máxima debe ser 100 caracteres"
         },
         SalarioColaborador: {
-            required: "Este Campo Es Requerido",
-            min: "La Cantidad Minima aqui deberia de ser 100",
+            required: "Este campo es requerido",
+            min: "La cantidad mínima aquí debería ser 100",
+        },
+        FechaInicioContrato: {
+            required: "Por favor ingrese la fecha de inicio del contrato",
+            dateLessThan: "La fecha de inicio debe ser menor que la fecha de fin"
+        },
+        FechaFinContrato: {
+            dateGreaterThan: "La fecha de fin debe ser mayor que la fecha de inicio"
         }
     },
     highlight: function (element) {
@@ -80,7 +147,6 @@ $("#AgregarColaboradorYcontrato").validate({
         $(element).addClass('is-valid').removeClass('is-invalid');
     }
 });
-
 
 PoblarTablaColaboradores();
 
