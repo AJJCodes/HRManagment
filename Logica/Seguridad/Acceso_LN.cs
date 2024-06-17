@@ -1,4 +1,5 @@
 ﻿using Datos.BaseDatos;
+using Modelo.Seguridad;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,39 +20,39 @@ namespace Logica.Seguridad
 
 
         #region Consultas Sobre Usuario
-        public Usuario_VM GetUserByEmailAndPassword(string email, string password, out string errorMsg)
-        {
-            errorMsg = null;
+        //public Usuario_VM GetUserByEmailAndPassword(string email, string password, out string errorMsg)
+        //{
+        //    errorMsg = null;
 
-            var usuarioEntity = bd.Usuario.Where(u => u.Activo).FirstOrDefault(u => u.NombreUsuario == email);
+        //    var usuarioEntity = bd.Usuario.Where(u => (bool)u.Activo).FirstOrDefault(u => u.NombreUsuario == email);
 
-            // No se encontró el usuario
-            if (usuarioEntity == null)
-            {
-                errorMsg = "Nombre de usuario incorrecto.";
-                return null;
-            }
+        //    // No se encontró el usuario
+        //    if (usuarioEntity == null)
+        //    {
+        //        errorMsg = "Nombre de usuario incorrecto.";
+        //        return null;
+        //    }
 
-            // Se encontró el usuario pero la contraseña no coincide
-            if (usuarioEntity.Contraseña != password.Trim())
-            {
-                errorMsg = "Contraseña incorrecta.";
-                return null;
-            }
+        //    // Se encontró el usuario pero la contraseña no coincide
+        //    if (usuarioEntity.Contraseña != password.Trim())
+        //    {
+        //        errorMsg = "Contraseña incorrecta.";
+        //        return null;
+        //    }
 
-            var usuarioVM = new Usuario_VM
-            {
-                IdUsuario = usuarioEntity.IdUsuario,
-                NombreUsuario = usuarioEntity.NombreUsuario,
-                Nombre = usuarioEntity.Nombre,
-                Apellidos = usuarioEntity.Apellidos,
-                Email = usuarioEntity.Email,
-                IdRol = usuarioEntity.IdRol,
-                Activo = usuarioEntity.Activo
-            };
+        //    var usuarioVM = new Usuario_VM
+        //    {
+        //        IdUsuario = usuarioEntity.IdUsuario,
+        //        NombreUsuario = usuarioEntity.NombreUsuario,
+        //        Nombre = usuarioEntity.Nombre,
+        //        Apellidos = usuarioEntity.Apellidos,
+        //        Email = usuarioEntity.Email,
+        //        IdRol = usuarioEntity.IdRol,
+        //        Activo = usuarioEntity.Activo
+        //    };
 
-            return usuarioVM;
-        }
+        //    return usuarioVM;
+        //}
         #endregion
     }
 }
