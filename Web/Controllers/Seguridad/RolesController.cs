@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Web.Controllers
+namespace Web.Controllers.Seguridad
 {
-    public class AccesoController : Controller
+    public class RolesController : Controller
     {
         public IActionResult Index()
         {

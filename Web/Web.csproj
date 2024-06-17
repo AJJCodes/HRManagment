@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\Seguridad\**" />
-    <Content Remove="Controllers\Seguridad\**" />
-    <EmbeddedResource Remove="Controllers\Seguridad\**" />
-    <None Remove="Controllers\Seguridad\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Dasboard\Assets\CSS\" />
     <Folder Include="wwwroot\Imagenes\Colaboradores\" />
     <Folder Include="wwwroot\ScriptsJS\DatosLaborales\" />

@@ -7,12 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Seguridad\**" />
-    <EmbeddedResource Remove="Seguridad\**" />
-    <None Remove="Seguridad\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Datos\Datos.csproj" />
     <ProjectReference Include="..\Modelo\Modelo.csproj" />
   </ItemGroup>
