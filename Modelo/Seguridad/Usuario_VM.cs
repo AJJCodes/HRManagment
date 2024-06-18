@@ -19,5 +19,8 @@ namespace Modelo.Seguridad
         public bool? Activo { get; set; }
 
         public int? IdRol { get; set; }
+
+        public string? NombreColaborador { get; set; }
+        public string ? Apelidos { get; set; }
     }
 }
