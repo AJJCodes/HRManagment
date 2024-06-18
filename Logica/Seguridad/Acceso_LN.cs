@@ -1,4 +1,5 @@
 ﻿using Datos.BaseDatos;
+using Microsoft.EntityFrameworkCore;
 using Modelo.Seguridad;
 using System;
 using System.Collections.Generic;
@@ -57,28 +58,16 @@ namespace Logica.Seguridad
         #endregion
 
         #region Consultas sobre Opciones a usuarios
-        public Dictionary<string, List<Controlador_VM>> GetAllowedControllersForUser(Usuario_VM user)
-        {
-            // Obtiene los controladores permitidos en una sola consulta
-            var allowedControllers = (from ro in bd.Rol_Operacion.AsNoTracking()
-                                      join op in bd.Operaciones.AsNoTracking() on ro.IdOperacion equals op.IdOperacion
-                                      join co in bd.Controlador.AsNoTracking() on op.IdControlador equals co.IdControlador
-                                      where ro.IdRol == user.IdRol && co.Activo == true
-                                      select new { op.NombreOperacion, co.NombreControlador, co.Icono, ModuloNombre = co.Modulo.NombreModulo })
-                                      .Distinct()
-                                      .ToList();
+        //public List<Opciones_VM> GetAllowedOptionsByUserRole(Usuario_VM user)
+        //{
+        //    // Obtiene los controladores permitidos en una sola consulta
+        //    var allowedOptions = (from op in bd.Opciones.AsNoTracking()
+        //                              join rolop in bd.RolesOpciones.AsNoTracking() on op.IdOpcion equals rolop.IdOpcion
+        //                              where rolop.IdRol == user.IdRol 
+        //                              select new { op.NombreOpcion, op.UrlOpcion, op.Icono})
+        //                              .ToList();
 
-            // Agrupa los controladores por modulo y crea instancias de Controlador_VM
-            var groupedByModule = allowedControllers
-                .GroupBy(co => co.ModuloNombre)
-                .ToDictionary(g => g.Key, g => g.Select(co => new Controlador_VM
-                {
-                    NombreControlador = co.NombreControlador,
-                    Icono = co.Icono
-                }).ToList());
-
-            return groupedByModule;
-        }
+        //}
         #endregion
     }
 }

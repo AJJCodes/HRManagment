@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Datos.BaseDatos;
@@ -22,7 +21,11 @@ public partial class Contexto : DbContext
 
     public virtual DbSet<DatosLaborales> DatosLaborales { get; set; }
 
+    public virtual DbSet<Opciones> Opciones { get; set; }
+
     public virtual DbSet<Roles> Roles { get; set; }
+
+    public virtual DbSet<RolesOpciones> RolesOpciones { get; set; }
 
     public virtual DbSet<SolicitudVacaciones> SolicitudVacaciones { get; set; }
 
@@ -77,6 +80,51 @@ public partial class Contexto : DbContext
                 .HasConstraintName("FK_ContratoDatosLab");
         });
 
+        modelBuilder.Entity<Opciones>(entity =>
+        {
+            entity.HasKey(e => e.IdOpcion).HasName("PK__Opciones__4F2388582B9AC5A6");
+
+            entity.ToTable("Opciones", "Seguridad");
+
+            entity.Property(e => e.Icono).HasMaxLength(50);
+            entity.Property(e => e.NombreOpcion).HasMaxLength(100);
+            entity.Property(e => e.UrlOpcion).HasMaxLength(255);
+
+            entity.HasMany(d => d.IdOpcionHijo).WithMany(p => p.IdOpcionPadre)
+                .UsingEntity<Dictionary<string, object>>(
+                    "OpcionesPadreHijo",
+                    r => r.HasOne<Opciones>().WithMany()
+                        .HasForeignKey("IdOpcionHijo")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Opciones___IdOpc__46486B8E"),
+                    l => l.HasOne<Opciones>().WithMany()
+                        .HasForeignKey("IdOpcionPadre")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Opciones___IdOpc__45544755"),
+                    j =>
+                    {
+                        j.HasKey("IdOpcionPadre", "IdOpcionHijo").HasName("PK__Opciones__3677F5F9A6F3EC48");
+                        j.ToTable("Opciones_Padre_Hijo", "Seguridad");
+                    });
+
+            entity.HasMany(d => d.IdOpcionPadre).WithMany(p => p.IdOpcionHijo)
+                .UsingEntity<Dictionary<string, object>>(
+                    "OpcionesPadreHijo",
+                    r => r.HasOne<Opciones>().WithMany()
+                        .HasForeignKey("IdOpcionPadre")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Opciones___IdOpc__45544755"),
+                    l => l.HasOne<Opciones>().WithMany()
+                        .HasForeignKey("IdOpcionHijo")
+                        .OnDelete(DeleteBehavior.ClientSetNull)
+                        .HasConstraintName("FK__Opciones___IdOpc__46486B8E"),
+                    j =>
+                    {
+                        j.HasKey("IdOpcionPadre", "IdOpcionHijo").HasName("PK__Opciones__3677F5F9A6F3EC48");
+                        j.ToTable("Opciones_Padre_Hijo", "Seguridad");
+                    });
+        });
+
         modelBuilder.Entity<Roles>(entity =>
         {
             entity.HasKey(e => e.IdRol).HasName("PK__Roles__2A49584C58A359F4");
@@ -84,6 +132,25 @@ public partial class Contexto : DbContext
             entity.ToTable("Roles", "Seguridad");
 
             entity.Property(e => e.NombreRol).HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<RolesOpciones>(entity =>
+        {
+            entity.HasKey(e => new { e.IdRol, e.IdOpcion }).HasName("PK__Roles_Op__BEBB60C938127F20");
+
+            entity.ToTable("Roles_Opciones", "Seguridad");
+
+            entity.Property(e => e.DescripcionOpcion).HasMaxLength(255);
+
+            entity.HasOne(d => d.IdOpcionNavigation).WithMany(p => p.RolesOpciones)
+                .HasForeignKey(d => d.IdOpcion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Roles_Opc__IdOpc__3BCADD1B");
+
+            entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.RolesOpciones)
+                .HasForeignKey(d => d.IdRol)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__Roles_Opc__IdRol__3AD6B8E2");
         });
 
         modelBuilder.Entity<SolicitudVacaciones>(entity =>
@@ -130,24 +197,4 @@ public partial class Contexto : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    public void SpAgregarColaboradorYContrato(string nombresColaborador, string apellidosColaborador, float salario, DateTime fechaInicio, DateTime? fechaFin, string? CodigoColab)
-    {
-        var nombresParam = new SqlParameter("@NombresColaborador", nombresColaborador);
-        var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
-        var salarioParam = new SqlParameter("@Salario", salario);
-        var fechaInicioParam = new SqlParameter("@FechaInicio", fechaInicio);
-
-        // Manejar el parámetro de fechaFin como un parámetro nulo si no tiene valor
-        var fechaFinParam = new SqlParameter("@FechaFin", fechaFin.HasValue ? (object)fechaFin.Value : DBNull.Value)
-        {
-            SqlDbType = System.Data.SqlDbType.DateTime
-        };
-
-        var CodigoColaborador = new SqlParameter("@CodigoColaborador", string.IsNullOrEmpty(CodigoColab) ? (object)DBNull.Value : CodigoColab);
-
-        this.Database.ExecuteSqlRaw("EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador",
-            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam, CodigoColaborador);
-    }
-
 }

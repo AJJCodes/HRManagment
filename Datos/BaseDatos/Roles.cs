@@ -15,5 +15,7 @@ public partial class Roles
 
     public int? ModificadoPor { get; set; }
 
+    public virtual ICollection<RolesOpciones> RolesOpciones { get; set; } = new List<RolesOpciones>();
+
     public virtual ICollection<Usuario> Usuario { get; set; } = new List<Usuario>();
 }
