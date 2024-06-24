@@ -1,17 +1,23 @@
 ﻿using Logica.Contratacion;
+using Logica.Seguridad;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Modelo.Contratacion;
+using Modelo.Seguridad;
+using Web.Controllers.Seguridad;
 
 namespace Web.Controllers.Contratacion
 {
-    public class Personal : Controller
+    public class Personal : BaseController
     {
 
-        private readonly Contratacion_LN ln;
-        public Personal() {
-            ln= new Contratacion_LN();
+        private readonly Contratacion_LN ln2;
+
+        public Personal(Acceso_LN ln, IHttpContextAccessor httpContextAccessor) : base(ln, httpContextAccessor)
+        {
+            ln2 = new Contratacion_LN();
         }
+
         // GET: Personal
         public ActionResult Index()
         {
@@ -92,7 +98,7 @@ namespace Web.Controllers.Contratacion
         public IActionResult AgregarColaboradorYcontrato(ColaboradoresYcontrato_VM Colaborador)
         {
             string? errorMessage = null;
-            bool resultado = ln.AgregarColaboradorYcontrato(Colaborador, out errorMessage);
+            bool resultado = ln2.AgregarColaboradorYcontrato(Colaborador, out errorMessage);
 
             if (resultado)
             {
@@ -108,7 +114,14 @@ namespace Web.Controllers.Contratacion
         [HttpPost]
         public IActionResult ValidarExistenciaCodigo(string Codigo)
         {
-            bool resultado = ln.VerificarExistenciaCodigo(Codigo);
+            bool resultado = ln2.VerificarExistenciaCodigo(Codigo);
+            return Json(!resultado);
+        }
+
+        [HttpPost]
+        public IActionResult ValidarExistenciaUsuario(string Usuario)
+        {
+            bool resultado = ln2.VerificarExistenciaUsuario(Usuario);
             return Json(!resultado);
         }
 
@@ -121,12 +134,33 @@ namespace Web.Controllers.Contratacion
             string? errorMessage = null;
 
             // Llamar a tu función para obtener la lista de usuarios
-            bool exito = ln.ProporcionaListaColaboradores(ref ListaColaboradores, out errorMessage);
+            bool exito = ln2.ProporcionaListaColaboradores(ref ListaColaboradores, out errorMessage);
 
             if (exito)
             {
                 // Devolver la lista de usuarios en el formato esperado por DataTables
                 return Json(new { data = ListaColaboradores });
+            }
+            else
+            {
+                // Devolver el mensaje de error en caso de fallo
+                return Json(new { error = errorMessage });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ObtenerListaRoles()
+        {
+            List<Roles_VM> ListaRoles = new List<Roles_VM>();
+            string? errorMessage = null;
+
+            // Llamar a tu función para obtener la lista de usuarios
+            bool exito = ln2.ProporcionaListaRoles(ref ListaRoles, out errorMessage);
+
+            if (exito)
+            {
+                // Devolver la lista de usuarios en el formato esperado por DataTables
+                return Json(new { data = ListaRoles });
             }
             else
             {

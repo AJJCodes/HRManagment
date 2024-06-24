@@ -1,5 +1,6 @@
 ﻿using Datos.BaseDatos;
 using Modelo.Contratacion;
+using Modelo.Seguridad;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,10 +44,50 @@ namespace Logica.Contratacion
             }
         }
 
+        public bool ProporcionaListaRoles(ref List<Roles_VM> ListaRoles, out string? errorMessage)
+        {
+            try
+            {
+                // Utilizar LINQ para seleccionar los campos necesarios y mapearlos a Roles_VM
+                ListaRoles = (from Rol in bd.Roles
+                              where Rol.Activo == true
+                                      select new Roles_VM
+                                      {
+                                          IdRol = Rol.IdRol,
+                                          NombreRol = Rol.NombreRol
+                                      }).ToList();
+                errorMessage = null;  // No hay error, establecer el mensaje a null
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
+        }
+
         public bool VerificarExistenciaCodigo(string CodigoColab)
         {
             // Buscar el elemento en la tabla correspondiente
             var elemento = bd.DatosLaborales.FirstOrDefault(e => e.CodigoColaborador == CodigoColab);
+
+            // Verificar si el elemento existe en la tabla
+            if (elemento != null)
+            {
+                // El elemento ya existe en la tabla
+                return true;
+            }
+            else
+            {
+                // El elemento no existe en la tabla
+                return false;
+            }
+        }
+
+        public bool VerificarExistenciaUsuario(string NombreUsuario)
+        {
+            // Buscar el elemento en la tabla correspondiente
+            var elemento = bd.Usuario.FirstOrDefault(e => e.NombreUsuario == NombreUsuario && e.Activo == true);
 
             // Verificar si el elemento existe en la tabla
             if (elemento != null)

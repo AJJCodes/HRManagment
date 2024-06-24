@@ -87,11 +87,54 @@
             <input type="date" name="FechaFinContrato" id="FechaFinContrato" class="w-100 form-control" />
         </div>
 
+        <div class="accordion " id="AccordionUsuarioNuevo">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Datos Usuario (Opcional)
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#AccordionUsuarioNuevo">
+                    <div class="accordion-body">
+                        <div class="row" id="ContenedorUsuarioNuevo">
+                            <div class="col-6">
+                                <label for="NombreUsuarioNuevo" class="form-label">Nombre Usuario Nuevo:</label>
+                                <input type="text" class="form-control" id="NombreUsuarioNuevo" name="NombreUsuarioNuevo" placeholder="Nombre Usuario">
+                                <div class="invalid-feedback"></div>
+                            </div>
 
-        <div style="text-align: right; background-color: #D3CECE;" class="p-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="ContraseñaUsuarioNuevo" class="form-label">Contraseña:</label>
+                                    <div class="input-group">
+                                        <input type="password" name="ContraseñaUsuarioNuevo" id="ContraseñaUsuarioNuevo" class="form-control" placeholder="Contraseña Usuario">
+                                        <button type="button" id="togglePassword" class="btn btn-outline-secondary" aria-label="Toggle password visibility">
+                                            <i id="toggleIcon" class="las la-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <select class="selectpicker" data-live-search="true">
+                                <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+                                <option data-tokens="mustard">Burger, Shake and a Smile</option>
+                                <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div style="text-align: right; background-color: #D3CECE;" class="p-2 pt-2">
             <button type="submit" class="btn btn-primary"><i class="las la-save"></i> Agregar</button>
             <button id="cancelButton" type="button" class="btn btn-danger"><i class="las la-undo"></i> Cancelar</button>
         </div>
+
 
 
     </form>

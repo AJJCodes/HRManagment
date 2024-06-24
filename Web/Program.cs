@@ -1,3 +1,5 @@
+using Logica.Seguridad;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -11,6 +13,12 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+// Registrar IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
+// Registrar Acceso_LN como un servicio
+builder.Services.AddScoped<Acceso_LN>();
 
 var app = builder.Build();
 

@@ -25,5 +25,9 @@ namespace Modelo.Contratacion
 
         public DateTime FechaInicio { get; set; }
         public DateTime? FechaFin { get; set; }
+
+        public string NombreUsuario { get; set; }
+        public string Contraseña { get; set; }
+
     }
 }

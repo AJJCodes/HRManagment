@@ -58,16 +58,23 @@ namespace Logica.Seguridad
         #endregion
 
         #region Consultas sobre Opciones a usuarios
-        //public List<Opciones_VM> GetAllowedOptionsByUserRole(Usuario_VM user)
-        //{
-        //    // Obtiene los controladores permitidos en una sola consulta
-        //    var allowedOptions = (from op in bd.Opciones.AsNoTracking()
-        //                              join rolop in bd.RolesOpciones.AsNoTracking() on op.IdOpcion equals rolop.IdOpcion
-        //                              where rolop.IdRol == user.IdRol 
-        //                              select new { op.NombreOpcion, op.UrlOpcion, op.Icono})
-        //                              .ToList();
+        public List<Opciones_VM> GetAllowedOptionsByUserRole(Usuario_VM user)
+        {
+            // Obtiene las opciones permitidas en una sola consulta
+            var allowedOptions = (from op in bd.Opciones.AsNoTracking()
+                                  join rolop in bd.RolesOpciones.AsNoTracking() on op.IdOpcion equals rolop.IdOpcion
+                                  where rolop.IdRol == user.IdRol
+                                  select new Opciones_VM
+                                  {
+                                      NombreOpcion = op.NombreOpcion,
+                                      UrlOpcion = op.UrlOpcion,
+                                      Icono = op.Icono
+                                  })
+                                  .ToList();
 
-        //}
+            return allowedOptions;
+        }
+
         #endregion
     }
 }

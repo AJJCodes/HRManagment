@@ -109,7 +109,24 @@ $("#AgregarColaboradorYcontrato").validate({
         },
         FechaFinContrato: {
             dateGreaterThan: '#FechaInicioContrato'
-        }
+        },
+        ContraseñaUsuarioNuevo: {
+            required: true
+        },
+        NombreUsuarioNuevo: {
+            required: true,
+            minlength: 6,
+            maxlength: 100,
+            remote: {
+                url: Componente.UrlControlador + 'ValidarExistenciaUsuario',
+                type: 'post',
+                data: {
+                    Usuario: function () {
+                        return $('#NombreUsuarioNuevo').val();
+                    }
+                }
+            }
+        },
     },
     messages: {
         CodigoColaborador: {
@@ -138,7 +155,16 @@ $("#AgregarColaboradorYcontrato").validate({
         },
         FechaFinContrato: {
             dateGreaterThan: "La fecha de fin debe ser mayor que la fecha de inicio"
-        }
+        },
+        ContraseñaUsuarioNuevo: {
+            required: "Este Campo es Requerido"
+        },
+        NombreUsuarioNuevo: {
+            required: "Campo Requerido",
+            minlength: "El Usuario debe tener una longitud mínima de 6 caracteres",
+            maxlength: "El Usuario debe tener una longitud máxima de 100 caracteres",
+            remote: "Este Usuario ya está en uso"
+        },
     },
     highlight: function (element) {
         $(element).addClass('is-invalid').removeClass('is-valid');
@@ -258,6 +284,8 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
         var SalarioColaborador = $('#SalarioColaborador').val();
         var FechaInicioColaborador = $('#FechaInicioContrato').val();
         var FechFinColaborador = $('#FechaFinContrato').val();
+        var contraseñaUsuarioNuevo = $('#ContraseñaUsuarioNuevo').val();
+        var nombreUsuarioNuevo = $('#NombreUsuarioNuevo').val();
 
         var DatosColab = {
             CodigoColaborador: CodigoColaborador,
@@ -265,7 +293,9 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
             ApellidosColaborador: ApellidosColaborador,
             Salario: SalarioColaborador,
             FechaInicio: FechaInicioColaborador,
-            FechaFin: FechFinColaborador
+            FechaFin: FechFinColaborador,
+            NombreUsuario: nombreUsuarioNuevo,
+            Contraseña: contraseñaUsuarioNuevo
         };
 
         $.ajax({
@@ -302,6 +332,23 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
                 });
             }
         });
+    }
+});
+
+
+
+document.getElementById('togglePassword').addEventListener('click', function () {
+    const passwordField = document.getElementById('ContraseñaUsuarioNuevo');
+    const icon = document.getElementById('toggleIcon');
+
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        icon.classList.remove('la-eye');
+        icon.classList.add('la-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        icon.classList.remove('la-eye-slash');
+        icon.classList.add('la-eye');
     }
 });
 

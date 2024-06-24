@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Datos.BaseDatos;
@@ -197,4 +199,51 @@ public partial class Contexto : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public int SpAgregarColaboradorYContrato(
+        string nombresColaborador,
+        string apellidosColaborador,
+        float salario,
+        DateTime fechaInicio,
+        DateTime? fechaFin,
+        string? codigoColab,
+        int? idRol = null,
+        string? usuario = null,
+        string? contraseña = null)
+    {
+        var nombresParam = new SqlParameter("@NombresColaborador", nombresColaborador);
+        var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
+        var salarioParam = new SqlParameter("@Salario", salario);
+        var fechaInicioParam = new SqlParameter("@FechaInicio", fechaInicio);
+
+        // Manejar el parámetro de fechaFin como un parámetro nulo si no tiene valor
+        var fechaFinParam = new SqlParameter("@FechaFin", fechaFin.HasValue ? (object)fechaFin.Value : DBNull.Value)
+        {
+            SqlDbType = System.Data.SqlDbType.DateTime
+        };
+
+        var codigoColaboradorParam = new SqlParameter("@CodigoColaborador", string.IsNullOrEmpty(codigoColab) ? (object)DBNull.Value : codigoColab);
+
+        var idRolParam = new SqlParameter("@IdRol", idRol.HasValue ? (object)idRol.Value : DBNull.Value)
+        {
+            SqlDbType = System.Data.SqlDbType.Int
+        };
+
+        var usuarioParam = new SqlParameter("@Usuario", string.IsNullOrEmpty(usuario) ? (object)DBNull.Value : usuario);
+
+        var contraseñaParam = new SqlParameter("@Contraseña", string.IsNullOrEmpty(contraseña) ? (object)DBNull.Value : contraseña);
+
+        // Parámetro de salida para capturar el ID del usuario creado
+        var usuarioIdParam = new SqlParameter("@UsuarioID", SqlDbType.Int)
+        {
+            Direction = ParameterDirection.Output
+        };
+
+        this.Database.ExecuteSqlRaw("EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador, @IdRol, @Usuario, @Contraseña, @UsuarioID OUTPUT",
+            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam, codigoColaboradorParam, idRolParam, usuarioParam, contraseñaParam, usuarioIdParam);
+
+        // Retornar el ID del usuario creado
+        return (int)usuarioIdParam.Value;
+    }
+
 }
