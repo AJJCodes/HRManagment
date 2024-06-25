@@ -16,13 +16,15 @@
 </style>
 
 
-<div id="DivTablaColaboradores" class="card p-5 rounded">
-    <table id="TablaDeColavboradores" class="table-responsive table align-middle mb-0 bg-white w-100 table table-striped table-hover table-bordered rounded-2">
+<div id="DivTablaSolicitudes" class="card p-5 rounded">
+    <table id="TablaSolicitudVacacionesAdmin" class="table-responsive table align-middle mb-0 bg-white w-100 table table-striped table-hover table-bordered rounded-2">
         <thead class="bg-light">
             <tr>
                 <th>Codigo Colaborador</th>
                 <th>Nombre Completo</th>
-                <th>Salario</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Cantidad Dias</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -34,15 +36,15 @@
 
 
 
-<div id="DivAgregarColaborador" style="display:none" class="container shadow-lg p-4">
-    <form class="row" id="AgregarColaboradorYcontrato">
+<div id="DivAgregarNuevaSolicitud" style="display:none" class="container shadow-lg p-4">
+    <form class="row" id="AgregarSolicitudVacacion">
 
         <p class="text-start my-3 fw-bold fs-4">Datos Colaborador</p>
 
         <!-- Lado izquierdo -->
 
         <div class="col-6">
-            <label for="NombresColaborador" class="form-label">Nombres:</label>
+            <label for="NombresColaborador" class="form-label">Co:</label>
             <input type="text" class="form-control" id="NombresColaborador" name="NombresColaborador">
             <div class="invalid-feedback"></div>
         </div>
@@ -79,7 +81,7 @@
 
         <div class="col-6">
             <label for="FechaInicioContrato" class="form-label">Fecha de Inicio de Contrato</label>
-            <input type="date" name="FechaInicioContrato" id="FechaInicioContrato"  class="w-100 form-control" />
+            <input type="date" name="FechaInicioContrato" id="FechaInicioContrato" class="w-100 form-control" />
         </div>
 
         <div class="col-6 mb-3">
@@ -144,6 +146,5 @@
 </div>
 
 @section scripts {
-@*     <script type="text/javascript" src="~/Scripts/JSvistas/Clientes/ValidacionesAgregar.js"></script> *@
-    <script type="text/javascript" src="~/ScriptsJS/Contratacion//Colaboradores/Index.js"></script>
+    <script type="text/javascript" src="~/ScriptsJS/GestionTiempo/Vacaciones/SolicitarVacacionesAdmin.js"></script>
 }

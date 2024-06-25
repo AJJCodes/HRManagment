@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,7 +36,7 @@ public partial class Contexto : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=sql5113.site4now.net; Database=db_aa7fc9_hrmanagment; User ID=db_aa7fc9_hrmanagment_admin; Password=Dario#$%23;");
+        => optionsBuilder.UseSqlServer("Server=sql8006.site4now.net; Database=db_aaa279_hrmanagment; User ID=db_aaa279_hrmanagment_admin; Password=Dario#$%23;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -200,16 +199,17 @@ public partial class Contexto : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-    public int SpAgregarColaboradorYContrato(
-        string nombresColaborador,
-        string apellidosColaborador,
-        float salario,
-        DateTime fechaInicio,
-        DateTime? fechaFin,
-        string? codigoColab,
-        int? idRol = null,
-        string? usuario = null,
-        string? contraseña = null)
+
+    public void SpAgregarColaboradorYContrato(
+    string nombresColaborador,
+    string apellidosColaborador,
+    float salario,
+    DateTime fechaInicio,
+    DateTime? fechaFin,
+    string? codigoColab,
+    int? idRol = null,
+    string? usuario = null,
+    string? contraseña = null)
     {
         var nombresParam = new SqlParameter("@NombresColaborador", nombresColaborador);
         var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
@@ -233,17 +233,8 @@ public partial class Contexto : DbContext
 
         var contraseñaParam = new SqlParameter("@Contraseña", string.IsNullOrEmpty(contraseña) ? (object)DBNull.Value : contraseña);
 
-        // Parámetro de salida para capturar el ID del usuario creado
-        var usuarioIdParam = new SqlParameter("@UsuarioID", SqlDbType.Int)
-        {
-            Direction = ParameterDirection.Output
-        };
-
-        this.Database.ExecuteSqlRaw("EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador, @IdRol, @Usuario, @Contraseña, @UsuarioID OUTPUT",
-            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam, codigoColaboradorParam, idRolParam, usuarioParam, contraseñaParam, usuarioIdParam);
-
-        // Retornar el ID del usuario creado
-        return (int)usuarioIdParam.Value;
+        this.Database.ExecuteSqlRaw(
+            "EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador, @IdRol, @Usuario, @Contraseña",
+            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam, codigoColaboradorParam, idRolParam, usuarioParam, contraseñaParam);
     }
-
 }

@@ -3,6 +3,8 @@
 };
 
 
+
+
 //Metodos de validacion personalizados
 // Añadir método de validación personalizado
 $.validator.addMethod("dateGreaterThan", function (value, element, params) {
@@ -230,6 +232,7 @@ function PoblarTablaColaboradores() {
                         className: "btn btn-primary",
                         action: function (e, dt, node, config) {
                             $('#DivTablaColaboradores').hide(); // Ocultar el div de la tabla
+                            PoblarSelectPickerRoles();
                             $('#DivAgregarColaborador').show(); // Mostrar el div del formulario de agregar Colaborador
                         }
                     },
@@ -351,4 +354,35 @@ document.getElementById('togglePassword').addEventListener('click', function () 
         icon.classList.add('la-eye');
     }
 });
+
+
+function PoblarSelectPickerRoles() {
+    // Realizar la llamada AJAX para obtener los roles
+    $.ajax({
+        url: Componente.UrlControlador+'ObtenerListaRoles', // Ajusta la URL según sea necesario
+        type: 'POST',
+        success: function (response) {
+            if (response.data) {
+                var roles = response.data;
+                var $select = $('#RolNuevoUsuario');
+
+                // Vaciar el select actual
+                $select.empty();
+
+                // Añadir la opción por defecto
+                $select.append('<option selected>Seleccione El Rol del Usuario</option>');
+
+                // Añadir las nuevas opciones
+                $.each(roles, function (index, Rol) {
+                    $select.append('<option value="' + Rol.idRol + '">' + Rol.nombreRol + '</option>');
+                });
+            } else {
+                console.error('Error:', response.error);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+}
 

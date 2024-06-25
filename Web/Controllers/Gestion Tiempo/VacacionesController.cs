@@ -4,7 +4,7 @@ namespace Web.Controllers.Gestion_Tiempo
 {
     public class VacacionesController : Controller
     {
-        public IActionResult Index()
+        public IActionResult SolitarVacacionesAdmin()
         {
             return View();
         }
