@@ -289,6 +289,7 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
         var FechFinColaborador = $('#FechaFinContrato').val();
         var contraseñaUsuarioNuevo = $('#ContraseñaUsuarioNuevo').val();
         var nombreUsuarioNuevo = $('#NombreUsuarioNuevo').val();
+        var idRolNuevoUsuario = $('#RolNuevoUsuario').val();
 
         var DatosColab = {
             CodigoColaborador: CodigoColaborador,
@@ -298,7 +299,8 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
             FechaInicio: FechaInicioColaborador,
             FechaFin: FechFinColaborador,
             NombreUsuario: nombreUsuarioNuevo,
-            Contraseña: contraseñaUsuarioNuevo
+            Contraseña: contraseñaUsuarioNuevo,
+            Idrol: idRolNuevoUsuario
         };
 
         $.ajax({

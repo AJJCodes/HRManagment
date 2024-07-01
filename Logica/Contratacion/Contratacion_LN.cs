@@ -106,23 +106,90 @@ namespace Logica.Contratacion
         #region CRUD
         public bool AgregarColaboradorYcontrato(ColaboradoresYcontrato_VM e, out string? errorMessage)
         {
-            try
+            using (var transaction = bd.Database.BeginTransaction())
             {
-                // Ejecuta el procedimiento almacenado
-                bd.SpAgregarColaboradorYContrato(e.NombresColaborador, e.ApellidosColaborador, e.Salario, e.FechaInicio, e.FechaFin,e.CodigoColaborador);
+                try
+                {
+                    // Insertar en la tabla Colaboradores
+                    var nuevoColaborador = new Colaboradores
+                    {
+                        NombresColaborador = e.NombresColaborador,
+                        ApellidosColaborador = e.ApellidosColaborador
+                    };
+                    bd.Colaboradores.Add(nuevoColaborador);
+                    bd.SaveChanges();
 
-                // Guarda los cambios en la base de datos
-                bd.SaveChanges();
+                    int colaboradorID = nuevoColaborador.IdColaborador;
 
-                errorMessage = null;  // No hay error, establecer el mensaje a null
-                return true;
-            }
-            catch (Exception ex)
-            {
-                errorMessage = ex.Message;
-                return false;
+                    // Insertar en la tabla Contratos
+                    var nuevoContrato = new Contrato
+                    {
+                        IdColaborador = colaboradorID,
+                        Salario = e.Salario,
+                        FechaInicio = e.FechaInicio,
+                        FechaFin = e.FechaFin
+                    };
+                    bd.Contrato.Add(nuevoContrato);
+                    bd.SaveChanges();
+
+                    int contratoID = nuevoContrato.IdContrato;
+
+                    // Insertar en la tabla DatosLaborales
+                    var nuevoDatosLaborales = new DatosLaborales
+                    {
+                        CodigoColaborador = e.CodigoColaborador,
+                        EsActual = true,
+                        EsNuevo = true,
+                        IdContrato = contratoID,
+                    };
+                    bd.DatosLaborales.Add(nuevoDatosLaborales);
+                    bd.SaveChanges();
+
+                    var NuevoRegistroVacAcumulada = new VacacionesAcumuladas
+                    {
+                        CantVacDias = 0,
+                        IdDatosLaborales = nuevoDatosLaborales.IdRegistroDatosLaborales
+                    };
+                    bd.VacacionesAcumuladas.Add(NuevoRegistroVacAcumulada);
+                    bd.SaveChanges();
+
+                    // Verificar si los parámetros @IdRol, @Usuario y @Contraseña no son nulos
+                    if (e.Idrol.HasValue && !string.IsNullOrEmpty(e.NombreUsuario) && !string.IsNullOrEmpty(e.Contraseña))
+                    {
+                        // Crear un nuevo usuario
+                        var nuevoUsuario = new Usuario
+                        {
+                            IdRol = e.Idrol.Value,
+                            NombreUsuario = e.NombreUsuario,
+                            Contraseña = e.Contraseña,
+                            FechaCreacion = DateTime.Now,
+                            Activo = true
+                        };
+                        bd.Usuario.Add(nuevoUsuario);
+                        bd.SaveChanges();
+
+                        // Actualizar el colaborador con el ID del usuario recién creado
+                        nuevoColaborador.IdUsuario = nuevoUsuario.IdUsuario;
+                        bd.Colaboradores.Update(nuevoColaborador);
+                        bd.SaveChanges();
+                    }
+                    bd.SaveChanges();
+                    // Confirmar la transacción
+                    transaction.Commit();
+
+                    errorMessage = null;  // No hay error, establecer el mensaje a null
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // Manejar errores y revertir la transacción
+                    transaction.Rollback();
+                    errorMessage = ex.Message;
+                    return false;
+                }
             }
         }
+
         #endregion
     }
 }

@@ -38,15 +38,15 @@ namespace Web.Controllers.Seguridad
 
             if (!string.IsNullOrEmpty(errorMsg))
             {
-                ViewBag.Error = errorMsg;
-                return View();
+                return Json(new { success = false, errorMessage = errorMsg });
             }
 
             // Serializar el objeto Usuario_VM a JSON y almacenarlo en la sesión
             HttpContext.Session.SetString("User", JsonConvert.SerializeObject(oUser));
             ViewBag.UserName = oUser.NombreColaborador + " " + oUser.Apelidos;
-            return RedirectToAction("Index", "Home");
+            return Json(new { success = true });
         }
+
 
         public IActionResult Logout()
         {

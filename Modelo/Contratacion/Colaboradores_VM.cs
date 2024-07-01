@@ -28,6 +28,7 @@ namespace Modelo.Contratacion
 
         public string NombreUsuario { get; set; }
         public string Contraseña { get; set; }
+        public int? Idrol { get; set; } 
 
     }
 }
