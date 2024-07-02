@@ -1,5 +1,6 @@
 ﻿using Datos.BaseDatos;
 using Microsoft.EntityFrameworkCore;
+using Modelo.Contratacion;
 using Modelo.Seguridad;
 using System;
 using System.Collections.Generic;
@@ -66,6 +67,7 @@ namespace Logica.Seguridad
                                   where rolop.IdRol == user.IdRol
                                   select new Opciones_VM
                                   {
+                                      IdOpcion = op.IdOpcion,
                                       NombreOpcion = op.NombreOpcion,
                                       UrlOpcion = op.UrlOpcion,
                                       Icono = op.Icono,
@@ -75,6 +77,38 @@ namespace Logica.Seguridad
 
             return allowedOptions;
         }
+
+        public Roles_VM GetUserRole(Usuario_VM user)
+        {
+
+                var role = (from r in bd.Roles
+                            where r.IdRol == user.IdRol
+                            select new Roles_VM
+                            {
+                                IdRol = r.IdRol,
+                                NombreRol = r.NombreRol
+                            }).FirstOrDefault();
+
+            return role;
+            
+        }
+
+        public Colaboradores_VM GetUserRealData(Usuario_VM user)
+        {
+            var colaborador = (from Col in bd.Colaboradores
+                               join u in bd.Usuario on Col.IdUsuario equals u.IdUsuario
+                               where Col.IdUsuario == user.IdUsuario
+                               select new Colaboradores_VM
+                               {
+                                   IdColaborador = Col.IdColaborador,
+                                   NombresColaborador = Col.NombresColaborador,
+                                   ApellidosColaborador = Col.ApellidosColaborador
+                               }).FirstOrDefault();
+
+            return colaborador;
+        }
+
+
 
         #endregion
     }

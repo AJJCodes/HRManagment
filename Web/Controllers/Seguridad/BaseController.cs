@@ -24,13 +24,15 @@ namespace Web.Controllers.Seguridad
             base.OnActionExecuting(context);
 
             var httpContext = _httpContextAccessor.HttpContext;
+            Usuario_VM user = null;
 
             if (httpContext.Session.GetString("User") != null)
             {
+                var userJson = httpContext.Session.GetString("User");
+                user = JsonConvert.DeserializeObject<Usuario_VM>(userJson);
+
                 if (httpContext.Session.GetString("AllowedOperationsLoaded") == null)
                 {
-                    var userJson = httpContext.Session.GetString("User");
-                    var user = JsonConvert.DeserializeObject<Usuario_VM>(userJson);
                     var optionsAllowed = _ln.GetAllowedOptionsByUserRole(user); // Renombrada
 
                     var optionsAllowedJson = JsonConvert.SerializeObject(optionsAllowed); // Renombrada
@@ -42,7 +44,16 @@ namespace Web.Controllers.Seguridad
                 var allowedOptionsList = JsonConvert.DeserializeObject<List<Opciones_VM>>(allowedOptionsString); // Renombrada
                 context.HttpContext.Items["AllowedOptions"] = allowedOptionsList;
                 ViewBag.AllowedOptions = allowedOptionsList; // Asigna a ViewBag
+
+                var userRole = _ln.GetUserRole(user); // Obtener el rol del usuario
+                ViewBag.UserRole = userRole.NombreRol; // Asigna el rol del usuario a ViewBag
+
+                var NombreColaborador = _ln.GetUserRealData(user);
+                ViewBag.NombreColaborador = NombreColaborador.NombresColaborador;
+                ViewBag.ApellidosColaborador = NombreColaborador.ApellidosColaborador;
             }
         }
+
+
     }
 }

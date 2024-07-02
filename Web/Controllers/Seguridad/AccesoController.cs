@@ -43,7 +43,6 @@ namespace Web.Controllers.Seguridad
 
             // Serializar el objeto Usuario_VM a JSON y almacenarlo en la sesión
             HttpContext.Session.SetString("User", JsonConvert.SerializeObject(oUser));
-            ViewBag.UserName = oUser.NombreColaborador + " " + oUser.Apelidos;
             return Json(new { success = true });
         }
 
