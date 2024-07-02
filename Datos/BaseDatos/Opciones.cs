@@ -13,6 +13,10 @@ public partial class Opciones
 
     public string? Icono { get; set; }
 
+    public string? IdPadre { get; set; }
+
+    public string? DescripcionOpcion { get; set; }
+
     public virtual ICollection<RolesOpciones> RolesOpciones { get; set; } = new List<RolesOpciones>();
 
     public virtual ICollection<Opciones> IdOpcionHijo { get; set; } = new List<Opciones>();

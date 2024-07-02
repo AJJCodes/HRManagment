@@ -1,4 +1,7 @@
 using Logica.Seguridad;
+using Logica.Contratacion;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +20,9 @@ builder.Services.AddSession(options =>
 // Registrar IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
-// Registrar Acceso_LN como un servicio
+// Registrar Acceso_LN y Contratacion_LN como servicios
 builder.Services.AddScoped<Acceso_LN>();
+builder.Services.AddScoped<Contratacion_LN>();
 
 var app = builder.Build();
 
@@ -34,10 +38,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
-
 // Agregar middleware de sesión
 app.UseSession();
+
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

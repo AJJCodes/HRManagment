@@ -68,7 +68,8 @@ namespace Logica.Seguridad
                                   {
                                       NombreOpcion = op.NombreOpcion,
                                       UrlOpcion = op.UrlOpcion,
-                                      Icono = op.Icono
+                                      Icono = op.Icono,
+                                      Idpadre = op.IdPadre
                                   })
                                   .ToList();
 

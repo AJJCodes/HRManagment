@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Datos.BaseDatos;
@@ -37,7 +35,7 @@ public partial class Contexto : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=sql8006.site4now.net; Database=db_aaa279_hrmanagment; User ID=db_aaa279_hrmanagment_admin; Password=Dario#$%23;");
+        => optionsBuilder.UseSqlServer("Server=sql8006.site4now.net; Database=db_aaa279_hrmanagment; User ID=db_aaa279_hrmanagment_admin; Password='Dario#$%23';");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -66,7 +64,8 @@ public partial class Contexto : DbContext
 
             entity.HasOne(d => d.IdColaboradorNavigation).WithMany(p => p.Contrato)
                 .HasForeignKey(d => d.IdColaborador)
-                .HasConstraintName("FK_Contrato");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_IdColab");
         });
 
         modelBuilder.Entity<DatosLaborales>(entity =>
@@ -79,7 +78,8 @@ public partial class Contexto : DbContext
 
             entity.HasOne(d => d.IdContratoNavigation).WithMany(p => p.DatosLaborales)
                 .HasForeignKey(d => d.IdContrato)
-                .HasConstraintName("FK_ContratoDatosLab");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_IdCont");
         });
 
         modelBuilder.Entity<Opciones>(entity =>
@@ -88,7 +88,9 @@ public partial class Contexto : DbContext
 
             entity.ToTable("Opciones", "Seguridad");
 
+            entity.Property(e => e.DescripcionOpcion).HasMaxLength(200);
             entity.Property(e => e.Icono).HasMaxLength(50);
+            entity.Property(e => e.IdPadre).HasMaxLength(100);
             entity.Property(e => e.NombreOpcion).HasMaxLength(100);
             entity.Property(e => e.UrlOpcion).HasMaxLength(255);
 
@@ -166,7 +168,8 @@ public partial class Contexto : DbContext
 
             entity.HasOne(d => d.IdRegistroColaboradorNavigation).WithMany(p => p.SolicitudVacaciones)
                 .HasForeignKey(d => d.IdRegistroColaborador)
-                .HasConstraintName("FK_SolicitudVaca");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_IdRegCol");
         });
 
         modelBuilder.Entity<Usuario>(entity =>
@@ -192,59 +195,12 @@ public partial class Contexto : DbContext
 
             entity.HasOne(d => d.IdDatosLaboralesNavigation).WithMany(p => p.VacacionesAcumuladas)
                 .HasForeignKey(d => d.IdDatosLaborales)
-                .HasConstraintName("FK_DatosLaborales");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_IdDatosLab");
         });
 
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-
-    public void SpAgregarColaboradorYContrato(
-        string nombresColaborador,
-        string apellidosColaborador,
-        float salario,
-        DateTime fechaInicio,
-        DateTime? fechaFin,
-        string codigoColab,
-        int? idRol,
-        string usuario,
-        string contraseña)
-    {
-        var nombresParam = new SqlParameter("@NombresColaborador", nombresColaborador);
-        var apellidosParam = new SqlParameter("@ApellidosColaborador", apellidosColaborador);
-        var salarioParam = new SqlParameter("@Salario", salario);
-        var fechaInicioParam = new SqlParameter("@FechaInicio", fechaInicio);
-
-        // Manejar el parámetro de fechaFin como un parámetro nulo si no tiene valor
-        var fechaFinParam = new SqlParameter("@FechaFin", fechaFin.HasValue ? (object)fechaFin.Value : DBNull.Value)
-        {
-            SqlDbType = System.Data.SqlDbType.DateTime
-        };
-
-        // Manejar el parámetro de código de colaborador como un parámetro nulo si no tiene valor
-        var codigoColaboradorParam = new SqlParameter("@CodigoColaborador", string.IsNullOrEmpty(codigoColab) ? (object)DBNull.Value : codigoColab);
-
-        var idRolParam = new SqlParameter("@IdRol", idRol.HasValue ? (object)idRol.Value : DBNull.Value)
-        {
-            SqlDbType = System.Data.SqlDbType.Int
-        };
-
-        var usuarioParam = new SqlParameter("@Usuario", string.IsNullOrEmpty(usuario) ? (object)DBNull.Value : usuario);
-        var contraseñaParam = new SqlParameter("@Contraseña", string.IsNullOrEmpty(contraseña) ? (object)DBNull.Value : contraseña);
-
-        // Parámetro de salida para el ID del usuario creado
-        var usuarioIdParam = new SqlParameter("@UsuarioID", SqlDbType.Int)
-        {
-            Direction = ParameterDirection.Output
-        };
-
-        this.Database.ExecuteSqlRaw(
-            "EXEC Contratacion.SpAgregarColaboradorYContrato @NombresColaborador, @ApellidosColaborador, @Salario, @FechaInicio, @FechaFin, @CodigoColaborador, @IdRol, @Usuario, @Contraseña, @UsuarioID OUTPUT",
-            nombresParam, apellidosParam, salarioParam, fechaInicioParam, fechaFinParam, codigoColaboradorParam, idRolParam, usuarioParam, contraseñaParam, usuarioIdParam);
-
-        // Opcionalmente, puedes utilizar el ID del usuario creado si lo necesitas
-        var usuarioId = (int?)usuarioIdParam.Value;
-    }
 }

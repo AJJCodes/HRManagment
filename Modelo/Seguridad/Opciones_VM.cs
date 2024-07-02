@@ -15,5 +15,7 @@ namespace Modelo.Seguridad
         public string? UrlOpcion { get; set; }
 
         public string? Icono { get; set; }
+
+        public string? Idpadre { get; set;}
     }
 }

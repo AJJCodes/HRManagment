@@ -1,17 +1,23 @@
+using Logica.Contratacion;
+using Logica.Seguridad;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Web.Controllers.Seguridad;
 using Web.Models;
 
 namespace Web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        // Modificado para aceptar los parámetros requeridos por el BaseController
+        public HomeController(ILogger<HomeController> logger, Acceso_LN ln, IHttpContextAccessor httpContextAccessor)
+            : base(ln, httpContextAccessor) // Llamada al constructor del BaseController con los parámetros necesarios
         {
             _logger = logger;
         }
+
 
         public IActionResult Index()
         {
