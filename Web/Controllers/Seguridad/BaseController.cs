@@ -51,6 +51,14 @@ namespace Web.Controllers.Seguridad
                 var NombreColaborador = _ln.GetUserRealData(user);
                 ViewBag.NombreColaborador = NombreColaborador.NombresColaborador;
                 ViewBag.ApellidosColaborador = NombreColaborador.ApellidosColaborador;
+
+
+
+                // Obtener el nombre del controlador y la acción actuales
+                var controller = context.RouteData.Values["controller"]?.ToString().ToLower();
+                var action = context.RouteData.Values["action"]?.ToString().ToLower();
+                ViewBag.CurrentController = controller;
+                ViewBag.CurrentAction = action;
             }
         }
 

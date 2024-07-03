@@ -6,6 +6,8 @@
     var NombresColaborador = ViewBag.NombreColaborador;
     var ApellidosColaborador = ViewBag.ApellidosColaborador;
     var RolUsuario = ViewBag.UserRole;
+    var currentController = ViewBag.CurrentController as string;
+    var currentAction = ViewBag.CurrentAction as string;
 
     //Variables para arreglar nombre
 
@@ -312,8 +314,9 @@
             <h1>Dashboard</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                    <li class="breadcrumb-item active">Dashboard</li>
+                    <li class="breadcrumb-item active">
+                        @currentController/@currentAction
+                    </li>
                 </ol>
             </nav>
         </div><!-- End Page Title -->
