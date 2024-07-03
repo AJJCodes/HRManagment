@@ -67,9 +67,13 @@
 
         <div class="col-6" style="margin-bottom: 20px;">
             <label for="SalarioColaborador" class="form-label">Salario Colaborador:</label>
-            <input type="number" class="form-control" id="SalarioColaborador" name="SalarioColaborador">
-            <div class="invalid-feedback"></div>
+            <div class="input-group">
+                <span class="input-group-text">C$</span>
+                <input type="text" class="form-control" id="SalarioColaborador" name="SalarioColaborador" oninput="formatNumber(this)">
+                <div class="invalid-feedback"></div>
+            </div>
         </div>
+
 
         <div class="col-6" style="margin-bottom: 20px;">
             <label for="CodigoColaborador" class="form-label">Codigo Colaborador:</label>

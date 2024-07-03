@@ -36,23 +36,20 @@
 
 
 
-<div id="DivAgregarNuevaSolicitudAdmin" style="display:none" class="container shadow-lg p-4">
-    <form class="row" id="AgregarSolicitudVacacionAdmin">
+<div id="DivAgregarNuevaSolicitud" style="display:none" class="container shadow-lg p-4">
+    <form class="row" id="AgregarSolicitudVacacion">
 
         <p class="text-start my-3 fw-bold fs-4">Datos Colaborador</p>
 
         <!-- Lado izquierdo -->
 
         <div class="col-6">
-            <div class="row pt-3">
-                <label for="NuevaSolicitudColaborador" class="form-label">Colaborador:</label>
-                <select id="NuevaSolicitudColaborador" name="NuevaSolicitudColaborador" class="form-select" aria-label="Rol Usuario">
-                    <option selected>Seleccione el colaborador</option>
-                </select>
-            </div>
+            <label for="NombresColaborador" class="form-label">Co:</label>
+            <input type="text" class="form-control" id="NombresColaborador" name="NombresColaborador">
+            <div class="invalid-feedback"></div>
         </div>
 
-        <div class="col-6">
+        <div class="col">
 
             <div class="form-group">
                 <label for="ApellidosColaborador" class="form-label">Apellido:</label>

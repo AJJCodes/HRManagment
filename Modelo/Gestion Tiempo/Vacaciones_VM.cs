@@ -18,4 +18,10 @@ namespace Modelo.Gestion_Tiempo
 
         public int? IdRegistroColaborador { get; set; }
     }
+
+    public class VacacionesSolicitadas_VM: Vacaciones_VM
+    {
+        public string NombreColaborador { get; set;}
+        public string CodigoColaborador { get; set;}
+    }
 }

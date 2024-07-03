@@ -3,6 +3,10 @@
 };
 
 
+var cleave = new Cleave('#SalarioColaborador', {
+    numeral: true,
+    numeralThousandsGroupStyle: 'thousand'
+});
 
 
 //Metodos de validacion personalizados
@@ -31,7 +35,11 @@ $.validator.addMethod("dateLessThan", function (value, element, params) {
     return false;
 }, 'La fecha de inicio debe ser menor que la fecha de fin.');
 
-
+$.validator.addMethod("currency", function (value, element) {
+    // Eliminar el prefijo y las comas para validar el valor numérico
+    var cleanValue = value.replace(/C\$|,/g, '').trim();
+    return this.optional(element) || !isNaN(parseFloat(cleanValue)) && parseFloat(cleanValue) >= 100;
+}, "Ingrese una cantidad Valida");
 
 
 
@@ -103,7 +111,7 @@ $("#AgregarColaboradorYcontrato").validate({
         },
         SalarioColaborador: {
             required: true,
-            min: 100,
+            currency: true,
         },
         FechaInicioContrato: {
             required: true,
@@ -149,7 +157,7 @@ $("#AgregarColaboradorYcontrato").validate({
         },
         SalarioColaborador: {
             required: "Este campo es requerido",
-            min: "La cantidad mínima aquí debería ser 100",
+            currency: "Por favor, ingrese un salario válido mayor o igual a 100",
         },
         FechaInicioContrato: {
             required: "Por favor ingrese la fecha de inicio del contrato",
@@ -167,6 +175,11 @@ $("#AgregarColaboradorYcontrato").validate({
             maxlength: "El Usuario debe tener una longitud máxima de 100 caracteres",
             remote: "Este Usuario ya está en uso"
         },
+    },
+    errorPlacement: function (error, element) {
+        // Coloca el mensaje de error en el contenedor invalid-feedback
+        error.addClass('invalid-feedback');
+        error.insertAfter(element.next('div.invalid-feedback'));
     },
     highlight: function (element) {
         $(element).addClass('is-invalid').removeClass('is-valid');
