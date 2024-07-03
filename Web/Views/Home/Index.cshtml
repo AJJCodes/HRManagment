@@ -1,6 +1,70 @@
-﻿<h1>
-    HRManagment
-</h1>
+﻿<!DOCTYPE html>
+<html lang="es">
 <head>
-    Bienvenido
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRManagment - Bienvenido</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .welcome-container {
+            background-color: #fff;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 100%;
+            animation: fadeIn 1s ease-in-out;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
+<body>
+    <div class="welcome-container">
+        <h1>HRManagment</h1>
+        <p>Bienvenido a HRManagment, la solución integral para la gestión de contrataciones y vacaciones de empleados.</p>
+        <p>Optimiza tus procesos de recursos humanos de manera eficiente y efectiva.</p>
+        <a href="dashboard.html" class="btn">Empezar</a>
+    </div>
+</body>
+</html>
