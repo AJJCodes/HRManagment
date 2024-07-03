@@ -52,46 +52,11 @@ namespace Web.Controllers.Contratacion
         }
 
         // GET: Personal/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditarDatosColaborador()
         {
             return View();
         }
 
-        // POST: Personal/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Personal/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Personal/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         #region CRUD
         [HttpPost]
