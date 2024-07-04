@@ -27,5 +27,6 @@ namespace Modelo.Gestion_Tiempo
         public int? IdTipoVacacion { get; set; }
 
         public int CreadoPor { get; set; }
+        public string? DescripcionVacaion { get; set; }
     }
 }

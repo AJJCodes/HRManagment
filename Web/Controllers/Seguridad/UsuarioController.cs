@@ -4,7 +4,7 @@ namespace Web.Controllers.Seguridad
 {
     public class UsuarioController : Controller
     {
-        public IActionResult Index()
+        public IActionResult ReporteUsuarioRoles()
         {
             return View();
         }

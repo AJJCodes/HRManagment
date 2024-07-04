@@ -3,14 +3,13 @@
 };
 
 var table;
-var IdColaboradorGlobal;
+
 var CantidadDiasDisponibles;
-function ConseguirDiasColaborador(idColaborador) {
-    IdColaboradorGlobal = idColaborador;
+function ConseguirMisDiasAcumulados() {
+
     $.ajax({
-        url: Componente.UrlControlador + 'ObtenerDiasAcumuladoColaborador',
+        url: Componente.UrlControlador + 'ObtenerMisDiasAcumulados',
         type: 'POST',
-        data: { IdColaborador: idColaborador },
         success: function (response) {
             if (response.data !== undefined && response.data !== null) {
                 $('#CantidadDiasEnPosecion').val(response.data); // Muestra la cantidad de días en el input
@@ -37,29 +36,39 @@ function ConseguirDiasColaborador(idColaborador) {
     });
 }
 
+function ConseguirMisDatosColaborador() {
 
-$('#NuevaSolicitudColaborador').change(function () {
-    var idColaborador = $(this).val(); // Obtiene el valor seleccionado
+    $.ajax({
+        url: Componente.UrlControlador + 'ObtenerMisDatosColaborador',
+        type: 'POST',
+        success: function (response) {
+            if (response.data !== undefined && response.data !== null) {
+                $('#NombreColaborador').val(response.data); // Muestra la cantidad de días en el input
+            } else if (response.error) {
+                // Mostrar el mensaje de error usando SweetAlert2
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error: ' + response.error,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            // Mostrar el error en caso de fallo en la solicitud AJAX
+            Swal.fire({
+                title: 'Error',
+                text: 'Error en la solicitud AJAX: ' + error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+}
 
-    if (idColaborador) {
-        $('#CantidaddiasSolicitado').val('');
-        $('#DiasrestantesContainer').hide();
-
-        var picker = $('#RangoFechasSolicitudVacAdmin').data('daterangepicker');
-
-        // Establecer el rango de fechas a vacío o a un rango predeterminado
-        picker.setStartDate(moment()); // Establece la fecha de inicio a la fecha actual
-        picker.setEndDate(moment());   // Establece la fecha de fin a la fecha actual
-
-        ConseguirDiasColaborador(idColaborador);
-    }
 
 
-});
-
-
-
-$('#RangoFechasSolicitudVacAdmin').daterangepicker({
+$('#RangoFechasSolicitudVacPersonal').daterangepicker({
     format: 'DD/MM/YYYY',
     locale: {
         applyLabel: 'Aceptar',
@@ -201,12 +210,12 @@ PoblarTablaSolicitutes();
 
 function PoblarTablaSolicitutes() {
     // Verificar si ya existe una instancia de DataTables y destruirla si es necesario
-    if ($.fn.DataTable.isDataTable('#TablaSolicitudVacacionesAdmin')) {
-        $('#TablaSolicitudVacacionesAdmin').DataTable().destroy();
+    if ($.fn.DataTable.isDataTable('#TablaSolicitudVacacionesPersonal')) {
+        $('#TablaSolicitudVacacionesPersonal').DataTable().destroy();
     }
 
     $.ajax({
-        url: Componente.UrlControlador + 'ObtenerlistaVacaciones',
+        url: Componente.UrlControlador + 'ObtenerlistaVacacionesPersonal',
         type: 'POST',
         success: function (response) {
             if (response.error) {
@@ -218,7 +227,7 @@ function PoblarTablaSolicitutes() {
                 return;
             }
 
-            table = $('#TablaSolicitudVacacionesAdmin').DataTable({
+            table = $('#TablaSolicitudVacacionesPersonal').DataTable({
                 data: response.data, // Utiliza los datos recibidos en la respuesta AJAX
                 columns: [
                     {
@@ -259,17 +268,15 @@ function PoblarTablaSolicitutes() {
                             return `
             <div class="d-flex justify-content-between">
                 <div class="btn-group">
-                    <button class="btn btn-success me-2 Autorizar-btn" data-idSolicitudVacaciones="${row.idSolicitudVacaciones}">
-                        <i class="las la-check"></i>
-                    </button>
-                    <button class="btn btn-danger Rechazar-btn" data-idSolicitudVacaciones="${row.idSolicitudVacaciones}">
-                        <i class="las la-times"></i>
+                    <button class="btn btn-danger Eliminar-btn" data-idSolicitudVacaciones="${row.idSolicitudVacaciones}">
+                        <i class="las la-trash"></i> Eliminar
                     </button>
                 </div>
             </div>
         `;
                         }
                     }
+
                 ],
                 order: [[0, 'asc']],
                 responsive: true,
@@ -280,10 +287,11 @@ function PoblarTablaSolicitutes() {
                         text: '<i class="las la-plus-circle"></i> Nuevo',
                         className: 'btn btn-primary btn-nuevo',
                         action: function (e, dt, node, config) {
-                            $('#DivTablaSolicitudes').hide(); // Ocultar el div de la tabla
-                            PoblarSelectPickerColaboradores();
+                            $('#DivTablaSolicitudesPersonal').hide(); // Ocultar el div de la tabla
+                            ConseguirMisDiasAcumulados();
+                            ConseguirMisDatosColaborador();
                             PoblarSelectPickerTiposVacaciones();
-                            $('#DivAgregarNuevaSolicitudAdmin').show(); // Mostrar el div del formulario de agregar Colaborador
+                            $('#DivAgregarNuevaSolicitudPersonal').show(); // Mostrar el div del formulario de agregar Colaborador
                         }
                     },
                     {
@@ -347,14 +355,13 @@ style.innerHTML = `
 document.head.appendChild(style);
 
 
-$('#GuardarSolicitudVacacion').click(function () {
-    var rangoFechas = $('#RangoFechasSolicitudVacAdmin').val(); // String de rango de fechas
+$('#GuardarSolicitudVacacionPersonal').click(function () {
+    var rangoFechas = $('#RangoFechasSolicitudVacPersonal').val(); // String de rango de fechas
     var fechas = rangoFechas.split(' - ');
     var fechaInicio = fechas[0];
     var fechaFin = fechas[1];
-    var IdColaborador = $('#NuevaSolicitudColaborador').val();
     var idTipoVacacion = $('#TipoVacacion').val();
-    var descripcionvac = $('#DescripcionSolicitudVacacion').val();
+    var descripcionvac = $('#DescripcionSolicitudVacacionPersonal').val();
     var CantidadDiasSolicitados = $('#CantidaddiasSolicitado').val();
 
     // Array para acumular mensajes de error
@@ -363,9 +370,6 @@ $('#GuardarSolicitudVacacion').click(function () {
     // Validar campos
     if (!fechaInicio || !fechaFin) {
         errores.push("Las fechas de inicio y fin son obligatorias.");
-    }
-    if (!IdColaborador) {
-        errores.push("El colaborador es obligatorio.");
     }
     if (!idTipoVacacion) {
         errores.push("El tipo de vacación es obligatorio.");
@@ -386,86 +390,53 @@ $('#GuardarSolicitudVacacion').click(function () {
         });
     } else {
         // Verifica si el formulario es válido utilizando jQuery Validation Plugin
-        
-            var Solicitud = {
-                IdTipoVacacion: idTipoVacacion,
-                IdRegistroColaborador: IdColaborador,
-                DescripcionVacaion: descripcionvac,
-                FechaInicio: fechaInicio,
-                FechaFin: fechaFin,
-                CantDias: CantidadDiasSolicitados
-            };
 
-            $.ajax({
-                url: Componente.UrlControlador + 'AgregarNuevaSolicitudAdmin',
-                type: 'POST',
-                data: Solicitud,
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Éxito',
-                            text: 'La solicitud se guardó exitosamente',
-                            showConfirmButton: true, // Muestra el botón "OK"
-                        }).then(function () {
-                            $('#DivAgregarNuevaSolicitudAdmin').hide();
-                            $('#TablaSolicitudVacacionesAdmin').DataTable().ajax.reload();
-                            $('#DivTablaSolicitudes').show();
-                            // Limpiar el formulario
-                            $('#AgregarSolicitudVacacionAdmin')[0].reset();
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: response.error || 'Hubo un error al agregar la solicitud'
-                        });
-                    }
-                },
-                error: function () {
+        var Solicitud = {
+            IdTipoVacacion: idTipoVacacion,
+            DescripcionVacaion: descripcionvac,
+            FechaInicio: fechaInicio,
+            FechaFin: fechaFin,
+            CantDias: CantidadDiasSolicitados
+        };
+
+        $.ajax({
+            url: Componente.UrlControlador + 'AgregarNuevaSolicitudPersonal',
+            type: 'POST',
+            data: Solicitud,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: 'La solicitud se guardó exitosamente',
+                        showConfirmButton: true, // Muestra el botón "OK"
+                    }).then(function () {
+                        $('#DivAgregarNuevaSolicitudPersonal').hide();
+                        $('#TablaSolicitudVacacionesPersonal').DataTable().ajax.reload();
+                        $('#DivTablaSolicitudesPersonal').show();
+                        // Limpiar el formulario
+                        $('#AgregarSolicitudVacacionPersonal')[0].reset();
+                    });
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
-                        text: 'Hubo un error al enviar el formulario'
+                        text: response.error || 'Hubo un error al agregar la solicitud'
                     });
                 }
-            });
-        
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al enviar el formulario'
+                });
+            }
+        });
+
     }
 });
 
-
-function PoblarSelectPickerColaboradores() {
-    // Realizar la llamada AJAX para obtener los roles
-    $.ajax({
-        url: Componente.UrlControlador + 'ObtenerListaColaboradoresEquipo', // Ajusta la URL según sea necesario
-        type: 'POST',
-        success: function (response) {
-            if (response.data) {
-                var Colaboradores = response.data;
-                var $select = $('#NuevaSolicitudColaborador');
-
-                // Vaciar el select actual
-                $select.empty();
-
-                // Añadir las nuevas opciones
-                $.each(Colaboradores, function (index, Colaborador) {
-                    if (index === 0) {
-                        ConseguirDiasColaborador(Colaborador.idColaborador);
-                    }
-                    $select.append('<option value="' + Colaborador.idColaborador + '">' + Colaborador.codigoColaborador + " " + Colaborador.nombresColaborador + '</option>');
-                });
-
-                //Despues de poblar seleccionar el pri
-            } else {
-                console.error('Error:', response.error);
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', error);
-        }
-    });
-}
 
 function PoblarSelectPickerTiposVacaciones() {
     // Realizar la llamada AJAX para obtener los roles
@@ -495,7 +466,7 @@ function PoblarSelectPickerTiposVacaciones() {
 }
 
 function DiasRestantes(DiasSolicitados) {
-    ConseguirDiasColaborador(IdColaboradorGlobal);
+    ConseguirMisDiasAcumulados();
     var diasDisponiblesCrudo = CantidadDiasDisponibles
     var DiasDisponibles = parseFloat(diasDisponiblesCrudo);
 
@@ -514,75 +485,25 @@ function DiasRestantes(DiasSolicitados) {
 }
 
 
-// Manejar el clic en el botón de autorizar
-$('#TablaSolicitudVacacionesAdmin').on('click', '.Autorizar-btn', function () {
-    var idSolicitud = $(this).data('idsolicitudvacaciones'); // Asegúrate de que el nombre coincida
-
-    // Confirmar la acción con el usuario
-    Swal.fire({
-        title: '¿Está seguro?',
-        text: "¿Desea autorizar esta solicitud?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, autorizar',
-        cancelButtonText: 'Cancelar'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Realizar la solicitud AJAX para autorizar la solicitud
-            $.ajax({
-                url: Componente.UrlControlador + 'AutorizarSolicitud', // Reemplaza 'TuControlador' con el nombre de tu controlador
-                type: 'POST',
-                data: { Idsolicitud: idSolicitud },
-                success: function (response) {
-                    if (response.success) {
-                        Swal.fire(
-                            'Autorizado',
-                            'La solicitud ha sido autorizada.',
-                            'success'
-                        );
-                        // Recargar la tabla para reflejar los cambios
-                        $('#TablaSolicitudVacacionesAdmin').DataTable().ajax.reload();
-                    } else {
-                        Swal.fire(
-                            'Error',
-                            response.error || 'Hubo un problema al autorizar la solicitud.',
-                            'error'
-                        );
-                    }
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire(
-                        'Error',
-                        'Hubo un error en la solicitud AJAX: ' + error,
-                        'error'
-                    );
-                }
-            });
-        }
-    });
-});
-
 
 // Manejar el evento de clic en el botón Rechazar
 // Manejar el clic en el botón de rechazar
-$('#TablaSolicitudVacacionesAdmin').on('click', '.Rechazar-btn', function () {
+$('#TablaSolicitudVacacionesPersonal').on('click', '.Eliminar-btn', function () {
     var idSolicitud = $(this).data('idsolicitudvacaciones'); // Asegúrate de que el nombre coincida
 
     // Confirmar la acción con el usuario
     Swal.fire({
         title: '¿Está seguro?',
-        text: "¿Desea rechazar esta solicitud?",
+        text: "¿Desea eliminar esta solicitud?",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, rechazar',
+        confirmButtonText: 'Sí, eliminar',
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Realizar la solicitud AJAX para rechazar la solicitud
+            // Realizar la solicitud AJAX para eliminar la solicitud
             $.ajax({
                 url: Componente.UrlControlador + 'RechazarSolicitud', // Reemplaza 'TuControlador' con el nombre de tu controlador
                 type: 'POST',
@@ -590,16 +511,16 @@ $('#TablaSolicitudVacacionesAdmin').on('click', '.Rechazar-btn', function () {
                 success: function (response) {
                     if (response.success) {
                         Swal.fire(
-                            'Rechazado',
-                            'La solicitud ha sido rechazada.',
+                            'Eliminado',
+                            'La solicitud ha sido eliminada.',
                             'success'
                         );
                         // Recargar la tabla para reflejar los cambios
-                        $('#TablaSolicitudVacacionesAdmin').DataTable().ajax.reload();
+                        $('#TablaSolicitudVacacionesPersonal').DataTable().ajax.reload();
                     } else {
                         Swal.fire(
                             'Error',
-                            response.error || 'Hubo un problema al rechazar la solicitud.',
+                            response.error || 'Hubo un problema al eliminar la solicitud.',
                             'error'
                         );
                     }
@@ -615,6 +536,7 @@ $('#TablaSolicitudVacacionesAdmin').on('click', '.Rechazar-btn', function () {
         }
     });
 });
+
 
 
 
