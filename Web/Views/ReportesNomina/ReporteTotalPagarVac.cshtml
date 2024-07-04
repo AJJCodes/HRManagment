@@ -1,1 +1,41 @@
-﻿<h1>Da bu di</h1>
+﻿@{
+    ViewBag.Title = "Nómina";
+}
+
+@* Estilo del error *@
+<style>
+    form .error {
+        color: red;
+    }
+
+    input.error {
+        border-color: red;
+    }
+</style>
+
+<div id="DivTablaNomina" class="card p-5 rounded">
+    <table id="TablaNomina" class="table-responsive table align-middle mb-0 bg-white w-100 table table-striped table-hover table-bordered rounded-2">
+        <thead class="bg-light">
+            <tr>
+                <th>Código Colaborador</th>
+                <th>Nombre del Colaborador</th>
+                <th>Cantidad de Días</th>
+                <th>Salario Mensual (C$)</th>
+                <th>Monto (C$)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se llenarán las filas dinámicamente -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="4" style="text-align:right">Total:</th>
+                <th id="totalMonto">0</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@section scripts {
+                <script type="text/javascript" src="~/ScriptsJS/Nomina/Nomina.js"></script>
+}

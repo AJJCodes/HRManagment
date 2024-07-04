@@ -32,12 +32,12 @@ namespace Logica.Gestion_Tiempo
                                    where Col.IdUsuario != IdUsuario
                                       select new VacacionesSolicitadas_VM
                                       {
-                                          FechaInicio = Sol.FechaInicio,
-                                          FechaFin = Sol.FechaFin,
-                                          CantDias = Sol.CantDias,
                                           IdSolicitudVacaciones = Sol.IdSolicitudVacaciones,
                                           NombreColaborador = Col.NombresColaborador + " " + Col.ApellidosColaborador,
-                                          CodigoColaborador = DL.CodigoColaborador
+                                           FechaInicio = Sol.FechaInicio,
+                                          FechaFin = Sol.FechaFin,
+                                          CantDias = Sol.CantDias,
+                                         CodigoColaborador = DL.CodigoColaborador
                                       }).ToList();
                 errorMessage = null;  
                 return true;

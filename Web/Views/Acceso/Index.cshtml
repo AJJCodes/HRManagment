@@ -34,13 +34,7 @@
                         <input id="password" name="password" type="password" required>
                         <label for="#">Contraseña</label>
                     </div>
-
-                    <div class="olvidar">
-                        <label for="#">
-                            <input type="checkbox"> Recordar
-                            <a href="#">Olvide mi Contraseña</a>
-                        </label>
-                    </div>
+                    
                     <div>
                         <button type="submit">Ingresar</button>
                     </div>
@@ -55,11 +49,24 @@
 
                     var formData = $(this).serialize();
 
+                    // Mostrar alerta de carga
+                    Swal.fire({
+                        title: 'Cargando',
+                        text: 'Por favor, espere...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
                     $.ajax({
                         type: "POST",
                         url: "/Acceso/Login",
                         data: formData,
                         success: function (response) {
+                            // Ocultar alerta de carga
+                            Swal.close();
+
                             if (response.success) {
                                 Swal.fire({
                                     icon: 'success',
@@ -79,6 +86,9 @@
                             }
                         },
                         error: function () {
+                            // Ocultar alerta de carga
+                            Swal.close();
+
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Error',
