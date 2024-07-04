@@ -215,29 +215,34 @@ function PoblarTablaColaboradores() {
                 columns: [
                     { data: 'codigoColaborador' },
                     { data: 'nombresColaborador' },
-                    { data: 'salario' },
                     {
-                        data: 'idColaborador',
+                        data: 'salario',
                         render: function (data, type, row) {
-                            return `
-                                <div class="d-flex justify-content-between">
-                                    <div class="btn-group">
-                                        <button class="btn btn-primary editar-btn" data-idColaborador="${row.idColaborador}">
-                                            <i class="las la-pencil-alt"></i>
-                                        </button>
-
-                                        <button class="btn btn-danger eliminar-btn" data-idColaborador="${row.idColaborador}">
-                                            <i class="las la-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
+                            return `C$ ${parseFloat(data).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                         }
                     }
+                    //{
+                    //    data: 'idColaborador',
+                    //    render: function (data, type, row) {
+                    //        return `
+                    //            <div class="d-flex justify-content-between">
+                    //                <div class="btn-group">
+                    //                    <button class="btn btn-primary editar-btn" data-idColaborador="${row.idColaborador}">
+                    //                        <i class="las la-pencil-alt"></i>
+                    //                    </button>
+
+                    //                    <button class="btn btn-danger eliminar-btn" data-idColaborador="${row.idColaborador}">
+                    //                        <i class="las la-trash-alt"></i>
+                    //                    </button>
+                    //                </div>
+                    //            </div>
+                    //        `;
+                    //    }
+                    //}
                 ],
                 order: [[0, 'asc']],
                 responsive: true,
-                dom: 'Bfrtip',
+                dom: 'B',
                 searching: false,
                 buttons: [
                     {
@@ -250,9 +255,6 @@ function PoblarTablaColaboradores() {
                         }
                     },
                     {
-                        extend: 'csv'
-                    },
-                    {
                         extend: 'excel'
                     },
                     {
@@ -261,7 +263,10 @@ function PoblarTablaColaboradores() {
                     {
                         extend: 'print'
                     }
-                ]
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.20/i18n/Spanish.json'
+                },
             });
         },
         error: function (xhr, status, error) {

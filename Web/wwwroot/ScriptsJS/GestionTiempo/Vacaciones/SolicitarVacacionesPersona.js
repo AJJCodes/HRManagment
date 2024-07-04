@@ -412,7 +412,7 @@ $('#GuardarSolicitudVacacionPersonal').click(function () {
                         showConfirmButton: true, // Muestra el botón "OK"
                     }).then(function () {
                         $('#DivAgregarNuevaSolicitudPersonal').hide();
-                        $('#TablaSolicitudVacacionesPersonal').DataTable().ajax.reload();
+                        PoblarTablaSolicitutes();
                         $('#DivTablaSolicitudesPersonal').show();
                         // Limpiar el formulario
                         $('#AgregarSolicitudVacacionPersonal')[0].reset();
@@ -516,7 +516,7 @@ $('#TablaSolicitudVacacionesPersonal').on('click', '.Eliminar-btn', function () 
                             'success'
                         );
                         // Recargar la tabla para reflejar los cambios
-                        $('#TablaSolicitudVacacionesPersonal').DataTable().ajax.reload();
+                        PoblarTablaSolicitutes();
                     } else {
                         Swal.fire(
                             'Error',

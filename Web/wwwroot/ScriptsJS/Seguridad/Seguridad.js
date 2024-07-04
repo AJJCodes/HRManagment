@@ -29,12 +29,12 @@ function PoblarTablaSeguridad() {
                 columns: [
                     { data: 'nombreUsuario' },
                     { data: 'nombreColaborador' },
-                    { data: 'rol' },
+                    { data: 'nombreRol' },
                     { data: 'codigoColaborador' }
                 ],
                 order: [[0, 'asc']],
                 responsive: true,
-                dom: 'Bfrtip',
+                dom: 'B',
                 buttons: [
                     {
                         extend: 'csvHtml5',

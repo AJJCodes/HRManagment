@@ -409,7 +409,7 @@ $('#GuardarSolicitudVacacion').click(function () {
                             showConfirmButton: true, // Muestra el botón "OK"
                         }).then(function () {
                             $('#DivAgregarNuevaSolicitudAdmin').hide();
-                            $('#TablaSolicitudVacacionesAdmin').DataTable().ajax.reload();
+                            PoblarTablaSolicitutes();
                             $('#DivTablaSolicitudes').show();
                             // Limpiar el formulario
                             $('#AgregarSolicitudVacacionAdmin')[0].reset();
@@ -543,7 +543,7 @@ $('#TablaSolicitudVacacionesAdmin').on('click', '.Autorizar-btn', function () {
                             'success'
                         );
                         // Recargar la tabla para reflejar los cambios
-                        $('#TablaSolicitudVacacionesAdmin').DataTable().ajax.reload();
+                        PoblarTablaSolicitutes();
                     } else {
                         Swal.fire(
                             'Error',
@@ -595,7 +595,7 @@ $('#TablaSolicitudVacacionesAdmin').on('click', '.Rechazar-btn', function () {
                             'success'
                         );
                         // Recargar la tabla para reflejar los cambios
-                        $('#TablaSolicitudVacacionesAdmin').DataTable().ajax.reload();
+                        PoblarTablaSolicitutes();
                     } else {
                         Swal.fire(
                             'Error',
