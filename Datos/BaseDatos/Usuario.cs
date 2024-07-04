@@ -20,4 +20,6 @@ public partial class Usuario
     public virtual ICollection<Colaboradores> Colaboradores { get; set; } = new List<Colaboradores>();
 
     public virtual Roles? IdRolNavigation { get; set; }
+
+    public virtual ICollection<SolicitudVacaciones> SolicitudVacaciones { get; set; } = new List<SolicitudVacaciones>();
 }

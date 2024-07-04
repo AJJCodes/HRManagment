@@ -33,14 +33,14 @@ namespace Web.Controllers.Seguridad
 
                 if (httpContext.Session.GetString("AllowedOperationsLoaded") == null)
                 {
-                    var optionsAllowed = _ln.GetAllowedOptionsByUserRole(user); // Renombrada
+                    var optionsAllowed = _ln.GetAllowedOptionsByUserRole(user); 
 
-                    var optionsAllowedJson = JsonConvert.SerializeObject(optionsAllowed); // Renombrada
+                    var optionsAllowedJson = JsonConvert.SerializeObject(optionsAllowed); 
                     httpContext.Session.SetString("AllowedOptions", optionsAllowedJson);
                     httpContext.Session.SetString("AllowedOperationsLoaded", "true");
                 }
 
-                var allowedOptionsString = httpContext.Session.GetString("AllowedOptions"); // Renombrada
+                var allowedOptionsString = httpContext.Session.GetString("AllowedOptions"); 
                 var allowedOptionsList = JsonConvert.DeserializeObject<List<Opciones_VM>>(allowedOptionsString); // Renombrada
                 context.HttpContext.Items["AllowedOptions"] = allowedOptionsList;
                 ViewBag.AllowedOptions = allowedOptionsList; // Asigna a ViewBag

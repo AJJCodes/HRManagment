@@ -2,46 +2,92 @@
     UrlControlador: "/Vacaciones/"
 };
 
-
-//var cleave = new Cleave('#SalarioColaborador', {
-//    numeral: true,
-//    numeralThousandsGroupStyle: 'thousand'
-//});
-
-
-//Metodos de validacion personalizados
-// Añadir método de validación personalizado
-
-
-
-
-//Variables Globales
 var table;
+var IdColaboradorGlobal;
+var CantidadDiasDisponibles;
+function ConseguirDiasColaborador(idColaborador) {
+    IdColaboradorGlobal = idColaborador;
+    $.ajax({
+        url: Componente.UrlControlador + 'ObtenerDiasAcumuladoColaborador',
+        type: 'POST',
+        data: { IdColaborador: idColaborador },
+        success: function (response) {
+            if (response.data) {
+                $('#CantidadDiasEnPosecion').val(response.data); // Muestra la cantidad de días en el input
+                CantidadDiasDisponibles = response.data;
+            } else if (response.error) {
+                // Mostrar el mensaje de error usando SweetAlert2
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error: ' + response.error,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            // Mostrar el error en caso de fallo en la solicitud AJAX
+            Swal.fire({
+                title: 'Error',
+                text: 'Error en la solicitud AJAX: ' + error,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    });
+}
 
+$('#NuevaSolicitudColaborador').change(function () {
+    var idColaborador = $(this).val(); // Obtiene el valor seleccionado
 
+    if (idColaborador) {
+        $('#CantidaddiasSolicitado').val('');
+        $('#DiasrestantesContainer').hide();
 
-// Inicializar el campo FechaInicioContrato
-$('input[name="FechaInicioContrato"]').daterangepicker({
-    singleDatePicker: true,
-    showDropdowns: true,
-    minYear: 1901,
-    maxYear: parseInt(moment().format('YYYY'), 10),
-    locale: {
-        format: 'YYYY-MM-DD'
+        var picker = $('#RangoFechasSolicitudVacAdmin').data('daterangepicker');
+
+        // Establecer el rango de fechas a vacío o a un rango predeterminado
+        picker.setStartDate(moment()); // Establece la fecha de inicio a la fecha actual
+        picker.setEndDate(moment());   // Establece la fecha de fin a la fecha actual
+
+        ConseguirDiasColaborador(idColaborador);
     }
+
+
 });
 
-// Inicializar el campo FechaFinContrato
-$('input[name="FechaFinContrato"]').daterangepicker({
-    singleDatePicker: true,
-    showDropdowns: true,
-    autoUpdateInput: false, // No actualizar el campo de entrada automáticamente
-    minYear: 1901,
-    maxYear: parseInt(moment().format('YYYY'), 10),
+
+
+$('#RangoFechasSolicitudVacAdmin').daterangepicker({
+    format: 'DD/MM/YYYY',
     locale: {
-        format: 'YYYY-MM-DD'
-    }
+        applyLabel: 'Aceptar',
+        cancelLabel: 'Cancelar',
+        fromLabel: 'De',
+        toLabel: 'Hasta',
+        daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+        monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo",
+            "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre",
+            "Diciembre"],
+        "firstDay": 1
+    },
+    ranges: {
+        'Hoy': [moment(), moment()],
+        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Últimos 7 Días': [moment().subtract(6, 'days'), moment()],
+        'Últimos 30 Días': [moment().subtract(29, 'days'), moment()],
+        'Mes Actual': [moment().startOf('month'), moment().endOf('month')],
+        'Último mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    },
+    minDate: moment(), // Restringe la selección a partir de hoy
+}, function (start, end) {
+    var cantidadDias = end.diff(start, 'days') + 1; // Calcula la cantidad de días
+    $('#CantidaddiasSolicitado').val(cantidadDias); // Muestra la cantidad de días en el input
+    DiasRestantes(cantidadDias);
+    $('#DiasSolicitadosOcultos').val(cantidadDias); // Guarda la cantidad de días en el campo oculto
 });
+
+
 
 // Validaciones
 //$("#AgregarColaboradorYcontrato").validate({
@@ -185,12 +231,12 @@ function PoblarTablaSolicitutes() {
                             return `
                                 <div class="d-flex justify-content-between">
                                     <div class="btn-group">
-                                        <button class="btn btn-primary editar-btn" data-idColaborador="${row.idColaborador}">
-                                            <i class="las la-pencil-alt"></i>
+                                        <button class="btn btn-primary editar-btn" data-idSolicitudVacaciones="${row.idSolicitudVacaciones}">
+                                            <i class="las la-check"></i>
                                         </button>
 
-                                        <button class="btn btn-danger eliminar-btn" data-idColaborador="${row.idColaborador}">
-                                            <i class="las la-trash-alt"></i>
+                                        <button class="btn btn-danger eliminar-btn" data-idSolicitudVacaciones="${row.idSolicitudVacaciones}">
+                                            <i class="las la-times"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -209,13 +255,9 @@ function PoblarTablaSolicitutes() {
                         action: function (e, dt, node, config) {
                             $('#DivTablaSolicitudes').hide(); // Ocultar el div de la tabla
                             PoblarSelectPickerColaboradores();
+                            PoblarSelectPickerTiposVacaciones();
                             $('#DivAgregarNuevaSolicitudAdmin').show(); // Mostrar el div del formulario de agregar Colaborador
                         }
-                    },
-                    {
-                        extend: 'csv',
-                        text: 'CSV',
-                        className: 'btn btn-outline-secondary'
                     },
                     {
                         extend: 'excel',
@@ -278,20 +320,62 @@ style.innerHTML = `
 document.head.appendChild(style);
 
 
+$('#GuardarSolicitudVacacion').click(function () {
+
+    // Verifica si el formulario es válido utilizando jQuery Validation Plugin
+    if ($('#AgregarColaboradorYcontrato').valid()) {
+        var IdColaborador = $('#NuevaSolicitudColaborador').val();
+        var IdTipoVacacion = $('#TipoVacacion').val();
 
 
-//$('#cancelButton').click(function () {
+        var DatosColab = {
+            CodigoColaborador: CodigoColaborador,
+            NombresColaborador: NombresColaborador,
+            ApellidosColaborador: ApellidosColaborador,
+            Salario: SalarioColaborador,
+            FechaInicio: FechaInicioColaborador,
+            FechaFin: FechFinColaborador,
+            NombreUsuario: nombreUsuarioNuevo,
+            Contraseña: contraseñaUsuarioNuevo,
+            Idrol: idRolNuevoUsuario
+        };
 
-//    // Ocultar el div de agregar cliente
-//    $('#DivAgregarColaborador').hide();
-
-//    // Mostrar el div de la tabla de clientes
-//    $('#DivTablaColaboradores').show();
-
-//    // Limpiar el formulario
-//    $('#AgregarColaboradorYcontrato')[0].reset();
-//});
-
+        $.ajax({
+            url: Componente.UrlControlador + 'AgregarColaboradorYcontrato',
+            type: 'POST',
+            data: DatosColab,
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: 'El Colaborador y contrato se agregaron exitosamente',
+                        showConfirmButton: true, // Muestra el botón "OK"
+                    }).then(function () {
+                        $('#DivAgregarColaborador').hide();
+                        $('#TablaDeColavboradores').DataTable().ajax.reload();
+                        $('#DivTablaColaboradores').show();
+                        // Limpiar el formulario
+                        $('#AgregarColaboradorYcontrato')[0].reset();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.error || 'Hubo un error al agregar el Colaborador y contrato'
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al enviar el formulario'
+                });
+            }
+        });
+    }
+});
 
 $('#AgregarColaboradorYcontrato').submit(function (event) {
     // Evita que el formulario se envíe automáticamente
@@ -360,22 +444,6 @@ $('#AgregarColaboradorYcontrato').submit(function (event) {
 
 
 
-//document.getElementById('togglePassword').addEventListener('click', function () {
-//    const passwordField = document.getElementById('ContraseñaUsuarioNuevo');
-//    const icon = document.getElementById('toggleIcon');
-
-//    if (passwordField.type === 'password') {
-//        passwordField.type = 'text';
-//        icon.classList.remove('la-eye');
-//        icon.classList.add('la-eye-slash');
-//    } else {
-//        passwordField.type = 'password';
-//        icon.classList.remove('la-eye-slash');
-//        icon.classList.add('la-eye');
-//    }
-//});
-
-
 function PoblarSelectPickerColaboradores() {
     // Realizar la llamada AJAX para obtener los roles
     $.ajax({
@@ -389,12 +457,41 @@ function PoblarSelectPickerColaboradores() {
                 // Vaciar el select actual
                 $select.empty();
 
-                // Añadir la opción por defecto
-                $select.append('<option selected>Seleccione Un Colaborador</option>');
-
                 // Añadir las nuevas opciones
                 $.each(Colaboradores, function (index, Colaborador) {
+                    if (index === 0) {
+                        ConseguirDiasColaborador(Colaborador.idColaborador);
+                    }
                     $select.append('<option value="' + Colaborador.idColaborador + '">' + Colaborador.codigoColaborador + " " + Colaborador.nombresColaborador + '</option>');
+                });
+
+                //Despues de poblar seleccionar el pri
+            } else {
+                console.error('Error:', response.error);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+        }
+    });
+}
+
+function PoblarSelectPickerTiposVacaciones() {
+    // Realizar la llamada AJAX para obtener los roles
+    $.ajax({
+        url: Componente.UrlControlador + 'ObtenerListaTipoVacaciones', // Ajusta la URL según sea necesario
+        type: 'POST',
+        success: function (response) {
+            if (response.data) {
+                var TiposVacaciones = response.data;
+                var $select = $('#TipoVacacion');
+
+                // Vaciar el select actual
+                $select.empty();
+
+                // Añadir las nuevas opciones
+                $.each(TiposVacaciones, function (index, TipoVac) {
+                    $select.append('<option value="' + TipoVac.idTipoVacacion + '">' + TipoVac.nombreTipoVacacion + '</option>');
                 });
             } else {
                 console.error('Error:', response.error);
@@ -405,4 +502,26 @@ function PoblarSelectPickerColaboradores() {
         }
     });
 }
+
+function DiasRestantes(DiasSolicitados) {
+    ConseguirDiasColaborador(IdColaboradorGlobal);
+    var diasDisponiblesCrudo = CantidadDiasDisponibles
+    var DiasDisponibles = parseFloat(diasDisponiblesCrudo);
+
+    // Verificar que la conversión de días disponibles sea válida
+    if (isNaN(DiasDisponibles)) {
+        DiasDisponibles = 0;
+    }
+
+    // Calcular la cantidad de días restantes
+    var diasRestantes = DiasDisponibles - DiasSolicitados;
+
+    // Establecer el valor en el campo de "Cantidad de Días Restantes"
+    $('#CantidaddiasRestantes').val(diasRestantes.toFixed(2));
+
+    $('#DiasrestantesContainer').show();
+}
+
+
+
 

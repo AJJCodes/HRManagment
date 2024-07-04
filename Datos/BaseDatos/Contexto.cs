@@ -29,6 +29,8 @@ public partial class Contexto : DbContext
 
     public virtual DbSet<SolicitudVacaciones> SolicitudVacaciones { get; set; }
 
+    public virtual DbSet<TiposVacaciones> TiposVacaciones { get; set; }
+
     public virtual DbSet<Usuario> Usuario { get; set; }
 
     public virtual DbSet<VacacionesAcumuladas> VacacionesAcumuladas { get; set; }
@@ -163,13 +165,41 @@ public partial class Contexto : DbContext
 
             entity.ToTable("SolicitudVacaciones", "GestionTiempo");
 
+            entity.Property(e => e.DescripcionRechazo)
+                .HasMaxLength(260)
+                .IsUnicode(false);
+            entity.Property(e => e.DescripcionVacacion)
+                .HasMaxLength(600)
+                .IsUnicode(false);
             entity.Property(e => e.FechaFin).HasColumnType("datetime");
             entity.Property(e => e.FechaInicio).HasColumnType("datetime");
+
+            entity.HasOne(d => d.CreadoPorNavigation).WithMany(p => p.SolicitudVacaciones)
+                .HasForeignKey(d => d.CreadoPor)
+                .HasConstraintName("FK_CreadoPorUsuario");
 
             entity.HasOne(d => d.IdRegistroColaboradorNavigation).WithMany(p => p.SolicitudVacaciones)
                 .HasForeignKey(d => d.IdRegistroColaborador)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_IdRegCol");
+
+            entity.HasOne(d => d.IdTipoVacacionNavigation).WithMany(p => p.SolicitudVacaciones)
+                .HasForeignKey(d => d.IdTipoVacacion)
+                .HasConstraintName("FK_SolicitudVacaciones_TiposVacaciones");
+        });
+
+        modelBuilder.Entity<TiposVacaciones>(entity =>
+        {
+            entity.HasKey(e => e.IdTipoVacacion).HasName("PK__TiposVac__6F55CD22F4C0DE55");
+
+            entity.ToTable("TiposVacaciones", "GestionTiempo");
+
+            entity.Property(e => e.DescripcionTipoVacacion)
+                .HasMaxLength(260)
+                .IsUnicode(false);
+            entity.Property(e => e.NombreTipoVacacion)
+                .HasMaxLength(260)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Usuario>(entity =>

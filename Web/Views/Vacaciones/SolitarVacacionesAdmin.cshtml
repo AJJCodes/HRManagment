@@ -43,7 +43,7 @@
 
         <!-- Lado izquierdo -->
 
-        <div class="col-6">
+        <div class="col-12">
             <div class="row pt-3">
                 <label for="NuevaSolicitudColaborador" class="form-label">Colaborador:</label>
                 <select id="NuevaSolicitudColaborador" name="NuevaSolicitudColaborador" class="form-select" aria-label="Rol Usuario">
@@ -52,90 +52,66 @@
             </div>
         </div>
 
-        <div class="col-6">
 
-            <div class="form-group">
-                <label for="ApellidosColaborador" class="form-label">Apellido:</label>
-                <input type="text" name="ApellidosColaborador" id="ApellidosColaborador" class="form-control">
-                <div class="invalid-feedback"></div>
-            </div>
-
-        </div>
-
-        <div class=" p-4">
-            <hr style="border: 2PX solid BLACK" />
-        </div>
-
-
-        <p class="text-start my-3 fw-bold fs-4">Datos de Contrato</p>
-
-
-        <div class="col-6" style="margin-bottom: 20px;">
-            <label for="SalarioColaborador" class="form-label">Salario Colaborador:</label>
-            <input type="number" class="form-control" id="SalarioColaborador" name="SalarioColaborador">
-            <div class="invalid-feedback"></div>
-        </div>
-
-        <div class="col-6" style="margin-bottom: 20px;">
-            <label for="CodigoColaborador" class="form-label">Codigo Colaborador:</label>
-            <input type="text" class="form-control" id="CodigoColaborador" name="CodigoColaborador">
-            <div class="invalid-feedback"></div>
-        </div>
 
         <div class="col-6">
-            <label for="FechaInicioContrato" class="form-label">Fecha de Inicio de Contrato</label>
-            <input type="date" name="FechaInicioContrato" id="FechaInicioContrato" class="w-100 form-control" />
-        </div>
-
-        <div class="col-6 mb-3">
-            <label for="FechaFinContrato" class="form-label">Fecha de Fin de Contrato</label>
-            <input type="date" name="FechaFinContrato" id="FechaFinContrato" class="w-100 form-control" />
-        </div>
-
-        <div class="accordion " id="AccordionUsuarioNuevo">
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Datos Usuario (Opcional)
-                    </button>
-                </h2>
-                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#AccordionUsuarioNuevo">
-                    <div class="accordion-body">
-                        <div class="row" id="ContenedorUsuarioNuevo">
-                            <div class="col-6">
-                                <label for="NombreUsuarioNuevo" class="form-label">Nombre Usuario Nuevo:</label>
-                                <input type="text" class="form-control" id="NombreUsuarioNuevo" name="NombreUsuarioNuevo" placeholder="Nombre Usuario">
-                                <div class="invalid-feedback"></div>
-                            </div>
-
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="ContraseñaUsuarioNuevo" class="form-label">Contraseña:</label>
-                                    <div class="input-group">
-                                        <input type="password" name="ContraseñaUsuarioNuevo" id="ContraseñaUsuarioNuevo" class="form-control" placeholder="Contraseña Usuario">
-                                        <button type="button" id="togglePassword" class="btn btn-outline-secondary" aria-label="Toggle password visibility">
-                                            <i id="toggleIcon" class="las la-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row pt-3">
-                            <label for="RolNuevoUsuario" class="form-label">Rol Usuario Nuevo:</label>
-                            <select id="RolNuevoUsuario" name="RolNuevoUsuario" class="form-select" aria-label="Rol Usuario">
-                                <option selected>Seleccione El Rol del Usuario</option>
-                            </select>
-                        </div>
-
+            <div class="row pt-3">
+                <div class="form-group">
+                    <label for="RangoFechasSolicitudVacAdmin" class="form-label">Rango Fechas:</label>
+                    <div class="input-group">
+                        <input type="text" name="RangoFechasSolicitudVacAdmin" id="RangoFechasSolicitudVacAdmin" class="form-control" placeholder="Rango de Fechas">
+                        <button type="button" id="toggleFecha" class="btn btn-outline-secondary" aria-label="Desplegar date selectpicker" onclick="$('#RangoFechasSolicitudVacAdmin').data('daterangepicker').toggle()">
+                            <i id="toggleIcon" class="las la-calendar-alt"></i>
+                        </button>
                     </div>
+                    <div class="invalid-feedback"></div>
                 </div>
             </div>
         </div>
 
+        <div class="col-6">
+            <div class="row pt-3">
+                <label for="TipoVacacion" class="form-label">Tipo de Vacacion:</label>
+                <select id="TipoVacacion" name="TipoVacacion" class="form-select" aria-label="Tipo Vacacion">
+                </select>
+            </div>
+            <div class="invalid-feedback"></div>
+        </div>
 
-        <div style="text-align: right; background-color: #D3CECE;" class="p-2 pt-2">
-            <button type="submit" class="btn btn-primary"><i class="las la-save"></i> Agregar</button>
+        <div class="p-4 col-12">
+            <hr style="border: 2PX solid BLACK" />
+        </div>
+
+        <div class="col-3">
+            <div class="form-group">
+                <label for="CantidadDiasEnPosecion" class="form-label">Cantidad de Días Disponibles:</label>
+                <input type="text" class="form-control" id="CantidadDiasEnPosecion" name="CantidadDiasEnPosecion" disabled>
+            </div>
+        </div>
+
+        <div class="col-3">
+            <div class="form-group">
+                <label for="CantidaddiasSolicitado" class="form-label">Cantidad de Días Solicitado:</label>
+                <input type="text" class="form-control" id="CantidaddiasSolicitado" name="CantidaddiasSolicitado" disabled>
+            </div>
+        </div>
+
+        <div class="col-3" id="DiasrestantesContainer" style="display:none">
+            <div class="form-group">
+                <label for="CantidaddiasRestantes" class="form-label">Cantidad de Días Restantes:</label>
+                <input type="text" class="form-control" id="CantidaddiasRestantes" name="CantidaddiasRestantes" disabled>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="DescripcionSolicitudVacacion">Descripción</label>
+            <textarea class="form-control" id="DescripcionSolicitudVacacion" rows="2"></textarea>
+        </div>
+
+
+
+        <div style="text-align: right; background-color: #D3CECE;" class="p-2 pt-5">
+            <button id="GuardarSolicitudVacacion" type="button" class="btn btn-primary"><i class="las la-save"></i> Solicitar</button>
             <button id="cancelButton" type="button" class="btn btn-danger"><i class="las la-undo"></i> Cancelar</button>
         </div>
 
