@@ -68,15 +68,9 @@
                             Swal.close();
 
                             if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Ha ingresado con éxito',
-                                    confirmButtonText: 'Ingresar'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = "/Home";
-                                    }
-                                });
+
+                                window.location.href = "/Home";
+                                
                             } else {
                                 Swal.fire({
                                     icon: 'error',
