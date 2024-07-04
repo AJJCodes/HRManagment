@@ -36,6 +36,7 @@ namespace Logica.Nomina
                                        Salario = Con.Salario,
                                        CantVacDias = vc.CantVacDias,
                                        CodigoColaborador = DL.CodigoColaborador
+                                       
                                    }).ToList();
                 errorMessage = null;
                 return true;

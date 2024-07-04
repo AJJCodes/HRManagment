@@ -1,1 +1,34 @@
-﻿<h1>Dabudi</h1>
+﻿@{
+    ViewBag.Title = "/Roles";
+}
+
+@* Estilo del error *@
+<style>
+    form .error {
+        color: red;
+    }
+
+    input.error {
+        border-color: red;
+    }
+</style>
+
+<div id="DivTablaSeguridad" class="card p-5 rounded">
+    <table id="TablaSeguridad" class="table-responsive table align-middle mb-0 bg-white w-100 table table-striped table-hover table-bordered rounded-2">
+        <thead class="bg-light">
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Nombre del Colaborador</th>
+                <th>Rol</th>
+                <th>Código del Colaborador</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se llenarán las filas dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+        <script type="text/javascript" src="~/ScriptsJS/Seguridad/Seguridad.js"></script>
+}
