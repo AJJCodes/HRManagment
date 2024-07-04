@@ -7,16 +7,10 @@ namespace Web.Controllers.Seguridad
 {
     public class RolesController : BaseController
     {
-
-        public RolesController(Acceso_LN ln, IHttpContextAccessor httpContextAccessor) : base(ln, httpContextAccessor)
-        {
-
-        }
-    public class RolesController : Controller
-    {
         private readonly VistaUsuario_LN _roles_LN;
 
-        public RolesController(IHttpContextAccessor httpContextAccessor)
+
+        public RolesController(Acceso_LN ln, IHttpContextAccessor httpContextAccessor) : base(ln, httpContextAccessor)
         {
             _roles_LN = new VistaUsuario_LN();
         }
