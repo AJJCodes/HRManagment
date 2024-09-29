@@ -37,13 +37,13 @@ public partial class Contexto : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=sql8005.site4now.net; Database=db_aaa279_hrmanag; User ID=db_aaa279_hrmanag_admin; Password='Dario#$%23';");
+        => optionsBuilder.UseSqlServer("Server=sql5112.site4now.net; Database=db_aadb57_hrmag; User ID=db_aadb57_hrmag_admin; Password='Dario#$%23';");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Colaboradores>(entity =>
         {
-            entity.HasKey(e => e.IdColaborador).HasName("PK__Colabora__3D2CA512884B76B8");
+            entity.HasKey(e => e.IdColaborador).HasName("PK__Colabora__3D2CA512D137C3DC");
 
             entity.ToTable("Colaboradores", "Contratacion");
 
@@ -57,7 +57,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<Contrato>(entity =>
         {
-            entity.HasKey(e => e.IdContrato).HasName("PK__Contrato__8569F05A8F4AB7AA");
+            entity.HasKey(e => e.IdContrato).HasName("PK__Contrato__8569F05A3D91928B");
 
             entity.ToTable("Contrato", "Contratacion");
 
@@ -72,7 +72,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<DatosLaborales>(entity =>
         {
-            entity.HasKey(e => e.IdRegistroDatosLaborales).HasName("PK__DatosLab__058FF7E82279F277");
+            entity.HasKey(e => e.IdRegistroDatosLaborales).HasName("PK__DatosLab__058FF7E8FFC6F7FE");
 
             entity.ToTable("DatosLaborales", "Contratacion");
 
@@ -86,7 +86,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<Opciones>(entity =>
         {
-            entity.HasKey(e => e.IdOpcion).HasName("PK__Opciones__4F2388582B9AC5A6");
+            entity.HasKey(e => e.IdOpcion).HasName("PK__Opciones__4F238858AD7E087B");
 
             entity.ToTable("Opciones", "Seguridad");
 
@@ -102,14 +102,14 @@ public partial class Contexto : DbContext
                     r => r.HasOne<Opciones>().WithMany()
                         .HasForeignKey("IdOpcionHijo")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Opciones___IdOpc__46486B8E"),
+                        .HasConstraintName("FK__Opciones___IdOpc__52593CB8"),
                     l => l.HasOne<Opciones>().WithMany()
                         .HasForeignKey("IdOpcionPadre")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Opciones___IdOpc__45544755"),
+                        .HasConstraintName("FK__Opciones___IdOpc__5165187F"),
                     j =>
                     {
-                        j.HasKey("IdOpcionPadre", "IdOpcionHijo").HasName("PK__Opciones__3677F5F9A6F3EC48");
+                        j.HasKey("IdOpcionPadre", "IdOpcionHijo").HasName("PK__Opciones__3677F5F9E932626B");
                         j.ToTable("Opciones_Padre_Hijo", "Seguridad");
                     });
 
@@ -119,21 +119,21 @@ public partial class Contexto : DbContext
                     r => r.HasOne<Opciones>().WithMany()
                         .HasForeignKey("IdOpcionPadre")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Opciones___IdOpc__45544755"),
+                        .HasConstraintName("FK__Opciones___IdOpc__5165187F"),
                     l => l.HasOne<Opciones>().WithMany()
                         .HasForeignKey("IdOpcionHijo")
                         .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK__Opciones___IdOpc__46486B8E"),
+                        .HasConstraintName("FK__Opciones___IdOpc__52593CB8"),
                     j =>
                     {
-                        j.HasKey("IdOpcionPadre", "IdOpcionHijo").HasName("PK__Opciones__3677F5F9A6F3EC48");
+                        j.HasKey("IdOpcionPadre", "IdOpcionHijo").HasName("PK__Opciones__3677F5F9E932626B");
                         j.ToTable("Opciones_Padre_Hijo", "Seguridad");
                     });
         });
 
         modelBuilder.Entity<Roles>(entity =>
         {
-            entity.HasKey(e => e.IdRol).HasName("PK__Roles__2A49584C58A359F4");
+            entity.HasKey(e => e.IdRol).HasName("PK__Roles__2A49584C28B99F81");
 
             entity.ToTable("Roles", "Seguridad");
 
@@ -142,7 +142,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<RolesOpciones>(entity =>
         {
-            entity.HasKey(e => new { e.IdRol, e.IdOpcion }).HasName("PK__Roles_Op__BEBB60C938127F20");
+            entity.HasKey(e => new { e.IdRol, e.IdOpcion }).HasName("PK__Roles_Op__BEBB60C958665BBE");
 
             entity.ToTable("Roles_Opciones", "Seguridad");
 
@@ -151,17 +151,17 @@ public partial class Contexto : DbContext
             entity.HasOne(d => d.IdOpcionNavigation).WithMany(p => p.RolesOpciones)
                 .HasForeignKey(d => d.IdOpcion)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Roles_Opc__IdOpc__3BCADD1B");
+                .HasConstraintName("FK__Roles_Opc__IdOpc__534D60F1");
 
             entity.HasOne(d => d.IdRolNavigation).WithMany(p => p.RolesOpciones)
                 .HasForeignKey(d => d.IdRol)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Roles_Opc__IdRol__3AD6B8E2");
+                .HasConstraintName("FK__Roles_Opc__IdRol__5441852A");
         });
 
         modelBuilder.Entity<SolicitudVacaciones>(entity =>
         {
-            entity.HasKey(e => e.IdSolicitudVacaciones).HasName("PK__Solicitu__0E13D378AABBAEBE");
+            entity.HasKey(e => e.IdSolicitudVacaciones).HasName("PK__Solicitu__0E13D378D6625EC2");
 
             entity.ToTable("SolicitudVacaciones", "GestionTiempo");
 
@@ -190,7 +190,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<TiposVacaciones>(entity =>
         {
-            entity.HasKey(e => e.IdTipoVacacion).HasName("PK__TiposVac__6F55CD22F4C0DE55");
+            entity.HasKey(e => e.IdTipoVacacion).HasName("PK__TiposVac__6F55CD226DE79518");
 
             entity.ToTable("TiposVacaciones", "GestionTiempo");
 
@@ -204,7 +204,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.IdUsuario).HasName("PK__Usuario__5B65BF971D5A374D");
+            entity.HasKey(e => e.IdUsuario).HasName("PK__Usuario__5B65BF97F986A03F");
 
             entity.ToTable("Usuario", "Seguridad");
 
@@ -219,7 +219,7 @@ public partial class Contexto : DbContext
 
         modelBuilder.Entity<VacacionesAcumuladas>(entity =>
         {
-            entity.HasKey(e => e.IdregistroVac).HasName("PK__Vacacion__6BC264711B662B61");
+            entity.HasKey(e => e.IdregistroVac).HasName("PK__Vacacion__6BC2647176897D59");
 
             entity.ToTable("VacacionesAcumuladas", "GestionTiempo");
 

@@ -26,36 +26,46 @@ namespace Logica.Seguridad
         {
             errorMsg = null;
 
-            var usuarioEntity = (from u in bd.Usuario
-                                 join c in bd.Colaboradores on u.IdUsuario equals c.IdUsuario
-                                 where u.Activo==true && u.NombreUsuario == NombreUsuario
-                                 select new { Usuario = u, Colaborador = c })
-                                 .FirstOrDefault();
-
-            // No se encontró el usuario
-            if (usuarioEntity == null)
+            try
             {
-                errorMsg = "Nombre de usuario incorrecto.";
+                var usuarioEntity = (from u in bd.Usuario
+                                     join c in bd.Colaboradores on u.IdUsuario equals c.IdUsuario
+                                     where u.Activo == true && u.NombreUsuario == NombreUsuario
+                                     select new { Usuario = u, Colaborador = c })
+                                     .FirstOrDefault();
+
+                // No se encontró el usuario
+                if (usuarioEntity == null)
+                {
+                    errorMsg = "Nombre de usuario incorrecto.";
+                    return null;
+                }
+
+                // Se encontró el usuario pero la contraseña no coincide
+                if (usuarioEntity.Usuario.Contraseña != password.Trim())
+                {
+                    errorMsg = "Contraseña incorrecta.";
+                    return null;
+                }
+
+                var usuarioVM = new Usuario_VM
+                {
+                    IdUsuario = usuarioEntity.Usuario.IdUsuario,
+                    NombreUsuario = usuarioEntity.Usuario.NombreUsuario,
+                    IdRol = usuarioEntity.Usuario.IdRol,
+                    Activo = usuarioEntity.Usuario.Activo
+                };
+
+                return usuarioVM;
+            }
+            catch (Exception ex)
+            {
+                // Loguear el error si es necesario
+                errorMsg = "Ocurrió un error al intentar obtener el usuario: " + ex.Message;
                 return null;
             }
-
-            // Se encontró el usuario pero la contraseña no coincide
-            if (usuarioEntity.Usuario.Contraseña != password.Trim())
-            {
-                errorMsg = "Contraseña incorrecta.";
-                return null;
-            }
-
-            var usuarioVM = new Usuario_VM
-            {
-                IdUsuario = usuarioEntity.Usuario.IdUsuario,
-                NombreUsuario = usuarioEntity.Usuario.NombreUsuario,
-                IdRol = usuarioEntity.Usuario.IdRol,
-                Activo = usuarioEntity.Usuario.Activo
-            };
-
-            return usuarioVM;
         }
+
         #endregion
 
         #region Consultas sobre Opciones a usuarios
